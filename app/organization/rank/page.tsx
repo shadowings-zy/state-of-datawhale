@@ -43,9 +43,23 @@ export default function Home() {
     rankingMap.forEach((data, name) => {
       const series = {
         name,
-        symbolSize: 20,
+        symbolSize: 25,
         type: "line",
         smooth: true,
+        emphasis: {
+          focus: "series",
+        },
+        endLabel: {
+          show: true,
+          formatter: "{a}",
+          distance: 20,
+        },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          fontSize: 10
+        },
         lineStyle: {
           width: 4,
         },
@@ -60,16 +74,21 @@ export default function Home() {
     const myChart = echarts.init(document.getElementById("echart"));
     const option = {
       title: {
-        text: "GitHub知识分享类组织Star数排名",
+        text: "GitHub知识分享类组织Star数总排名",
       },
       tooltip: {
         trigger: "item",
       },
       grid: {
         left: 30,
-        right: 110,
+        right: 150,
         bottom: 30,
         containLabel: true,
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+        },
       },
       xAxis: {
         type: "category",

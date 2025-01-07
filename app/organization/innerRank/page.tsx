@@ -43,7 +43,7 @@ export default function Home() {
     rankingMap.forEach((data, name) => {
       const series = {
         name,
-        symbolSize: 20,
+        symbolSize: 25,
         type: "line",
         smooth: true,
         emphasis: {
@@ -53,6 +53,12 @@ export default function Home() {
           show: true,
           formatter: "{a}",
           distance: 20,
+        },
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          fontSize: 10
         },
         lineStyle: {
           width: 4,
@@ -75,9 +81,14 @@ export default function Home() {
       },
       grid: {
         left: 30,
-        right: 110,
+        right: 150,
         bottom: 30,
         containLabel: true,
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+        },
       },
       xAxis: {
         type: "category",

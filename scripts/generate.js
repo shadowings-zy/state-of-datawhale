@@ -2,6 +2,9 @@ const m1 = require("./data/organizationDetail/2024-1.json");
 const m5 = require("./data/organizationDetail/2024-5.json");
 const m9 = require("./data/organizationDetail/2024-9.json");
 const m12 = require("./data/organizationDetail/2024-12.json");
+const repoDetail = require("./data/repo.json");
+const fs = require("fs");
+const path = require("path");
 
 const organizationName = [
   "freeCodeCamp",
@@ -15,6 +18,8 @@ const organizationName = [
   "papers-we-love",
   "datawhalechina",
 ];
+
+const key2024 = ["2024-1", "2024-2", "2024-3", "2024-4", "2024-5", "2024-6", "2024-7", "2024-8", "2024-9", "2024-10", "2024-11", "2024-12"];
 
 // 生成组织在知识分享类组织的内部排名
 const generateOrganizationInnerRank = () => {
@@ -54,11 +59,44 @@ const generateOrganizationRank = () => {
   return output;
 };
 
+const generateRepoDetailData = () => {
+  const repoNameList = repoDetail.map((item) => {
+    return item.name.replace("datawhalechina/", "");
+  });
+  // 根据repoNameList读取对应的json
+  const repoDetailData = repoNameList.map((item) => {
+    const jsonPath = path.join(__dirname, `./data/repoDetail/${item}.json`);
+    const jsonData = require(jsonPath);
+    const monthlyStars = Object.keys(jsonData.monthlyStars).reduce((acc, month) => {
+      if (key2024.includes(month)) {
+        acc[month] = jsonData.monthlyStars[month];
+      }
+      return acc;
+    }, {});
+    const monthlyTotalStars = Object.keys(jsonData.monthlyTotalStars).reduce((acc, month) => {
+      if (key2024.includes(month)) {
+        acc[month] = jsonData.monthlyTotalStars[month];
+      }
+      return acc;
+    }, {});
+
+    return {
+      name: item,
+      monthlyStars: monthlyStars,
+      monthlyTotalStars: monthlyTotalStars,
+    };
+  });
+
+  return repoDetailData;
+};
+
 const main = async () => {
   const innerRank = generateOrganizationInnerRank();
   const rank = generateOrganizationRank();
+  const repoDetailData = generateRepoDetailData();
   console.log(innerRank);
   console.log(rank);
+  console.log(repoDetailData);
 };
 
 main();

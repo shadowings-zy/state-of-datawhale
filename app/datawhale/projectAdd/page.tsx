@@ -684,7 +684,11 @@ export default function Home() {
   const generateSeriesList = () => {
     const seriesList: any[] = [];
     source.forEach((item) => {
-      const data = Object.keys(item.monthlyTotalStars).map((month) => item.monthlyTotalStars[month as keyof typeof item.monthlyTotalStars] || 0);
+      const data = Object.keys(item.monthlyStars).reduce((acc, month) => {
+        const curr = item.monthlyStars[month as keyof typeof item.monthlyStars] || 0;
+        acc.push(acc[acc.length - 1] + curr);
+        return acc;
+      }, [0]);
       seriesList.push({
         name: item.name,
         type: 'line',
@@ -705,7 +709,7 @@ export default function Home() {
     const option = {
       // animationDuration: 10000,
       title: {
-        text: 'Datawhale项目Star数'
+        text: 'Datawhale项目Star增长数'
       },
       tooltip: {
         trigger: 'item'

@@ -79,11 +79,6 @@ export default function Home() {
         bottom: 30,
         containLabel: true,
       },
-      toolbox: {
-        feature: {
-          saveAsImage: {},
-        },
-      },
       xAxis: {
         type: "category",
         splitLine: {

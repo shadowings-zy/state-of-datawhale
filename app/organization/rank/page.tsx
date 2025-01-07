@@ -20,16 +20,16 @@ export default function Home() {
   const years = ["2024-1", "2024-5", "2024-9", "2024-12"];
   const generateRankingData = () => {
     const value = [
-      { key: 'freeCodeCamp', value: [ 1, 1, 1, 1 ] },
-      { key: 'TheAlgorithms', value: [ 2, 2, 2, 2 ] },
-      { key: 'EbookFoundation', value: [ 3, 3, 3, 3 ] },
-      { key: 'ossu', value: [ 4, 4, 4, 4 ] },
-      { key: 'h5bp', value: [ 5, 5, 5, 6 ] },
-      { key: 'doocs', value: [ 6, 6, 6, 5 ] },
-      { key: 'jobbole', value: [ 7, 7, 8, 9 ] },
-      { key: 'dair-ai', value: [ 8, 8, 9, 8 ] },
-      { key: 'papers-we-love', value: [ 9, 10, 10, 10 ] },
-      { key: 'datawhalechina', value: [ 10, 9, 7, 7 ] }
+      { key: 'freeCodeCamp', value: [ 10, 11, 11, 11 ] },
+      { key: 'TheAlgorithms', value: [ 17, 16, 16, 16 ] },
+      { key: 'EbookFoundation', value: [ 20, 21, 21, 21 ] },
+      { key: 'ossu', value: [ 44, 43, 44, 41 ] },
+      { key: 'h5bp', value: [ 56, 57, 59, 62 ] },
+      { key: 'doocs', value: [ 63, 63, 61, 60 ] },
+      { key: 'jobbole', value: [ 76, 77, 78, 81 ] },
+      { key: 'dair-ai', value: [ 107, 86, 85, 76 ] },
+      { key: 'papers-we-love', value: [ 133, 130, 128, 128 ] },
+      { key: 'datawhalechina', value: [ 139, 106, 76, 68 ] }
     ]
     const map = new Map();
     for (const item of value) {
@@ -46,14 +46,6 @@ export default function Home() {
         symbolSize: 20,
         type: "line",
         smooth: true,
-        emphasis: {
-          focus: "series",
-        },
-        endLabel: {
-          show: true,
-          formatter: "{a}",
-          distance: 20,
-        },
         lineStyle: {
           width: 4,
         },
@@ -79,11 +71,6 @@ export default function Home() {
         bottom: 30,
         containLabel: true,
       },
-      toolbox: {
-        feature: {
-          saveAsImage: {},
-        },
-      },
       xAxis: {
         type: "category",
         splitLine: {
@@ -98,15 +85,12 @@ export default function Home() {
       },
       yAxis: {
         type: "value",
+        inverse: true,
         axisLabel: {
           margin: 30,
           fontSize: 16,
           formatter: "#{value}",
         },
-        inverse: true,
-        interval: 1,
-        min: 1,
-        max: names.length,
       },
       series: generateSeriesList(),
     };

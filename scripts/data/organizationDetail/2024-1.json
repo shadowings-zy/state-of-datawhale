@@ -1,0 +1,12 @@
+[
+  { "name": "freeCodeCamp", "rank": 10 },
+  { "name": "TheAlgorithms", "rank": 17 },
+  { "name": "EbookFoundation", "rank": 20 },
+  { "name": "ossu", "rank": 44 },
+  { "name": "h5bp", "rank": 56 },
+  { "name": "doocs", "rank": 63 },
+  { "name": "jobbole",  "rank": 76 },
+  { "name": "dair-ai", "rank": 107 },
+  { "name": "papers-we-love",  "rank": 133 },
+  { "name": "datawhalechina", "rank": 139 }
+]

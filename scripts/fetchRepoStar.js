@@ -2,8 +2,8 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-const TOKEN = "GITHUB TOKEN";
-const STAR_COUNT = 1000;
+const TOKEN = "";
+const STAR_COUNT = 0;
 const PAGE_SIZE = 100;
 
 const getDatawhaleGithubRepo = async () => {
@@ -90,15 +90,19 @@ const getGithubStarCount = async (repo) => {
 const main = async () => {
   const repoList = await getDatawhaleGithubRepo();
   console.log("repoList", repoList);
+  fs.writeFileSync(
+    path.join(__dirname, `./data/repo.json`),
+    JSON.stringify(repoList)
+  );
 
   for (const repo of repoList) {
     const repoName = repo.name.split("/")[1];
     const output = await getGithubStarCount(repoName);
     fs.writeFileSync(
-      path.join(__dirname, `./data/repo-detail/${repoName}.json`),
+      path.join(__dirname, `./data/repoStarDetail/${repoName}.json`),
       JSON.stringify(output)
     );
-    console.log("repoName", repoName, output);
+    console.log("repoDetail", output);
   }
 };
 

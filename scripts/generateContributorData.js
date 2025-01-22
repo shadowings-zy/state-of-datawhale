@@ -83,7 +83,17 @@ const getProjectByCommitList = (commitList) => {
 };
 
 const getLatestTimeCommit = (commitList) => {
-  const latestCommit = commitList
+  const earlyMorningCommit = commitList
+    .filter((item) => {
+      const date = dayjs(item.date, "HH:mm:ss");
+      return date.hour() <= 5;
+    })
+    .sort((a, b) => {
+      const dateA = dayjs(a, "HH:mm:ss");
+      const dateB = dayjs(b, "HH:mm:ss");
+      return dateA.isAfter(dateB);
+    });
+  const midnightCommit = commitList
     .filter((item) => {
       const date = dayjs(item.date, "HH:mm:ss");
       return date.hour() >= 22;
@@ -92,9 +102,11 @@ const getLatestTimeCommit = (commitList) => {
       const dateA = dayjs(a, "HH:mm:ss");
       const dateB = dayjs(b, "HH:mm:ss");
       return dateA.isAfter(dateB);
-    })[0];
-  console.log(latestCommit);
-  return latestCommit;
+    });
+  if (earlyMorningCommit.length > 0) {
+    return earlyMorningCommit[0];
+  }
+  return midnightCommit[0];
 };
 
 const convertCommitMapToTargetFormat = (commitMap) => {
@@ -131,7 +143,7 @@ const main = async () => {
   console.log("targetFormat", targetFormat);
 
   fs.writeFileSync(
-    path.join(__dirname, `./data/target.json`),
+    path.join(__dirname, `./data/datawhale-data-2024.json`),
     JSON.stringify(targetFormat)
   );
 };

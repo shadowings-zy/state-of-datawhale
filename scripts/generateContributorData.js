@@ -143,7 +143,7 @@ const main = async () => {
   console.log("targetFormat", targetFormat);
 
   fs.writeFileSync(
-    path.join(__dirname, `./data/datawhale-data-2024.json`),
+    path.join(__dirname, `./data/datawhale-2024-data.json`),
     JSON.stringify(targetFormat)
   );
 };

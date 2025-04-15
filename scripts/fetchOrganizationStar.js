@@ -48,22 +48,48 @@ const getOrganizationList = async (page) => {
 };
 
 const main = async () => {
-  let output = [];
-  for (let i = 1; i <= 2; i++) {
+  const KEY = "2025-4";
+  const PAGE_COUNT = 10;
+  const TOP_10_KNOWLEDGE_SHARING_ORGANIZATION = [
+    "freeCodeCamp",
+    "TheAlgorithms",
+    "EbookFoundation",
+    "ossu",
+    "doocs",
+    "h5bp",
+    "datawhalechina",
+    "dair-ai",
+    "jobbole",
+    "papers-we-love",
+  ];
+
+  let organizationList = [];
+  for (let i = 1; i <= PAGE_COUNT; i++) {
     const result = await getOrganizationList(i);
-    output = [...output, ...result];
+    organizationList = [...organizationList, ...result];
   }
-  output = output
+  organizationList = organizationList
     .sort((a, b) => b.starCount - a.starCount)
     .map((item, index) => ({
       ...item,
       rank: index + 1,
     }));
-  fs.writeFileSync(
-    path.join(__dirname, `./data/allOrganization.json`),
-    JSON.stringify(output)
+
+  const top10KnowledgeSharingOrganization = organizationList.filter((item) =>
+    TOP_10_KNOWLEDGE_SHARING_ORGANIZATION.includes(item.name)
   );
-  console.log(output);
+
+  fs.writeFileSync(
+    path.join(__dirname, `../data/${KEY}/allOrganization.json`),
+    JSON.stringify(organizationList)
+  );
+  fs.writeFileSync(
+    path.join(__dirname, `../data/${KEY}/top10KnowledgeSharingOrganization.json`),
+    JSON.stringify(top10KnowledgeSharingOrganization)
+  );
+
+  console.log("organizationList", organizationList);
+  console.log("top10KnowledgeSharingOrganization", top10KnowledgeSharingOrganization);
 };
 
 main();

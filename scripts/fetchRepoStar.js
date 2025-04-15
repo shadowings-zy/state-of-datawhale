@@ -88,6 +88,8 @@ const getGithubStarCount = async (repo) => {
 };
 
 const main = async () => {
+  const KEY = "2025-4";
+
   const repoList = await getDatawhaleGithubRepo();
   console.log("repoList", repoList);
   fs.writeFileSync(
@@ -99,7 +101,7 @@ const main = async () => {
     const repoName = repo.name.split("/")[1];
     const output = await getGithubStarCount(repoName);
     fs.writeFileSync(
-      path.join(__dirname, `./data/repoStarDetail/${repoName}.json`),
+      path.join(__dirname, `../data/${KEY}/repoDetail/${repoName}.json`),
       JSON.stringify(output)
     );
     console.log("repoDetail", output);

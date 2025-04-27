@@ -1,0 +1,257 @@
+[
+    {
+        "name": "dair-ai",
+        "starCount": 128380,
+        "rank": 77,
+        "introduction": "dair-ai是一个专注于人工智能领域的开源组织，致力于通过开源项目和教程推动AI技术的普及与应用。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": [
+            {
+                "name": "dair-ai/Prompt-Engineering-Guide",
+                "starCount": 55426,
+                "introduction": "dair-ai/Prompt-Engineering-Guide 是一个关于提示工程（Prompt Engineering）的指南，旨在帮助开发者优化与大型语言模型（如GPT）的交互。项目提供了丰富的资源，包括最佳实践、示例和工具，以提升提示设计的效率和效果。",
+                "organizationName": "dair-ai"
+            },
+            {
+                "name": "dair-ai/ML-YouTube-Courses",
+                "starCount": 16508,
+                "introduction": "dair-ai/ML-YouTube-Courses是一个精选的机器学习YouTube课程资源库，旨在帮助学习者通过高质量的免费视频课程提升技能。项目涵盖了从基础到高级的机器学习主题，适合不同水平的学习者。",
+                "organizationName": "dair-ai"
+            },
+            {
+                "name": "dair-ai/ml-visuals",
+                "starCount": 14855,
+                "introduction": "dair-ai/ml-visuals 是一个专注于机器学习的开源项目，提供了丰富的视觉化图表和模板，帮助研究人员和开发者更好地展示和解释机器学习概念、模型架构和实验结果。项目包含多种图表类型，适用于论文、博客、演示文稿等多种场景。",
+                "organizationName": "dair-ai"
+            }
+        ]
+    },
+    {
+        "name": "fastai",
+        "starCount": 92756,
+        "rank": 128,
+        "introduction": "fastai是一个开源组织，专注于深度学习与人工智能的教育和工具开发，旨在使AI技术更易于学习和应用。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": [
+            {
+                "name": "fastai/fastai",
+                "starCount": 26897,
+                "introduction": "fastai/fastai是一个深度学习库，旨在简化训练神经网络的过程。它基于PyTorch，提供了高级API和预训练模型，适用于计算机视觉、自然语言处理等领域。项目强调易用性和快速原型设计，适合初学者和专家。",
+                "organizationName": "fastai"
+            },
+            {
+                "name": "fastai/fastbook",
+                "starCount": 22973,
+                "introduction": "fastai/fastbook是一个开源项目，提供了《Deep Learning for Coders with fastai and PyTorch》一书的Jupyter Notebook版本，涵盖了从基础到高级的深度学习技术，适合开发者快速上手和实践。",
+                "organizationName": "fastai"
+            },
+            {
+                "name": "fastai/numerical-linear-algebra",
+                "starCount": 10472,
+                "introduction": "fastai/numerical-linear-algebra 是一个专注于数值线性代数的开源项目，提供了丰富的教程和代码示例，帮助用户理解和应用线性代数中的关键概念和算法。项目内容涵盖矩阵分解、线性方程组求解、特征值计算等，适合学习和研究数值计算的人员使用。",
+                "organizationName": "fastai"
+            }
+        ]
+    },
+    {
+        "name": "udacity",
+        "starCount": 87951,
+        "rank": 135,
+        "introduction": "Udacity是一个开源组织，专注于提供在线课程和开源项目，旨在帮助学习者掌握前沿技术。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": [
+            {
+                "name": "udacity/self-driving-car",
+                "starCount": 6257,
+                "introduction": "udacity/self-driving-car是Udacity开源的一个自动驾驶汽车项目，包含了从基础到高级的自动驾驶技术教程和代码示例，帮助开发者学习和实践自动驾驶相关技术。",
+                "organizationName": "udacity"
+            },
+            {
+                "name": "udacity/deep-learning-v2-pytorch",
+                "starCount": 5386,
+                "introduction": "udacity/deep-learning-v2-pytorch 是一个由 Udacity 提供的深度学习教程项目，专注于使用 PyTorch 框架进行深度学习模型的开发与训练。项目包含丰富的代码示例和课程材料，适合初学者和进阶学习者掌握深度学习的基础知识和实践技能。",
+                "organizationName": "udacity"
+            },
+            {
+                "name": "udacity/deep-reinforcement-learning",
+                "starCount": 5035,
+                "introduction": "udacity/deep-reinforcement-learning是一个专注于深度强化学习的开源项目，提供了丰富的教程和代码示例，帮助开发者掌握强化学习的基础知识和高级技巧。项目涵盖了从经典算法到最新技术的实现，适合初学者和进阶者学习与实践。",
+                "organizationName": "udacity"
+            }
+        ]
+    },
+    {
+        "name": "exacity",
+        "starCount": 38450,
+        "rank": 367,
+        "introduction": "exacity是一个开源组织，专注于深度学习与人工智能领域的资源分享与项目开发。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": [
+            {
+                "name": "exacity/deeplearningbook-chinese",
+                "starCount": 36349,
+                "introduction": "exacity/deeplearningbook-chinese是《深度学习》一书的中文翻译项目，旨在为中文读者提供高质量的学习资源。该项目涵盖了深度学习的核心概念、算法和实践应用，适合初学者和进阶者参考。",
+                "organizationName": "exacity"
+            },
+            {
+                "name": "exacity/simplified-deeplearning",
+                "starCount": 2514,
+                "introduction": "exacity/simplified-deeplearning 是一个简化深度学习概念和算法的开源项目，旨在帮助初学者更容易理解和掌握深度学习的基础知识。项目提供了详细的代码示例和解释，涵盖了从神经网络基础到高级模型的内容。",
+                "organizationName": "exacity"
+            }
+        ]
+    },
+    {
+        "name": "heyxyz",
+        "starCount": 23885,
+        "rank": 656,
+        "introduction": "heyxyz是一个开源组织，专注于开发与人工智能相关的工具和框架，并提供相关教程和文档。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": []
+    },
+    {
+        "name": "yandexdataschool",
+        "starCount": 19606,
+        "rank": 807,
+        "introduction": "yandexdataschool是一个开源组织，专注于数据科学和机器学习的教育与研究，提供丰富的教程和开源项目。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": [
+            {
+                "name": "yandexdataschool/nlp_course",
+                "starCount": 10075,
+                "introduction": "yandexdataschool/nlp_course是一个专注于自然语言处理（NLP）的开源课程项目，提供了丰富的学习资源和实践代码，涵盖从基础到高级的NLP技术，适合初学者和进阶者学习。",
+                "organizationName": "yandexdataschool"
+            },
+            {
+                "name": "yandexdataschool/Practical_RL",
+                "starCount": 6124,
+                "introduction": "Practical_RL是一个由Yandex Data School提供的强化学习实践课程，涵盖了从基础到高级的强化学习算法和实现，适合初学者和有经验的开发者。",
+                "organizationName": "yandexdataschool"
+            },
+            {
+                "name": "yandexdataschool/Practical_DL",
+                "starCount": 1635,
+                "introduction": "yandexdataschool/Practical_DL是一个深度学习实践课程项目，提供了一系列Jupyter Notebook教程，涵盖从基础到高级的深度学习技术。该项目旨在通过实际案例和代码示例，帮助学习者掌握深度学习的关键概念和应用。",
+                "organizationName": "yandexdataschool"
+            }
+        ]
+    },
+    {
+        "name": "NLPchina",
+        "starCount": 16934,
+        "rank": 931,
+        "introduction": "NLPchina是一个专注于自然语言处理（NLP）领域的开源组织，致力于开发和推广NLP相关的工具和资源。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": [
+            {
+                "name": "NLPchina/elasticsearch-sql",
+                "starCount": 7008,
+                "introduction": "NLPchina/elasticsearch-sql是一个开源项目，它提供了使用SQL语法查询Elasticsearch的功能。该项目允许用户通过熟悉的SQL语句来操作Elasticsearch，简化了复杂查询的编写过程，提高了开发效率。适用于需要将SQL与Elasticsearch结合使用的场景。",
+                "organizationName": "NLPchina"
+            },
+            {
+                "name": "NLPchina/ansj_seg",
+                "starCount": 6519,
+                "introduction": "NLPchina/ansj_seg是一个基于Java的中文分词工具，支持多种分词算法，包括NLP、CRF、INDEX等。项目提供了丰富的API接口，易于集成到各类应用中，适用于文本分析、搜索引擎优化等场景。ansj_seg以其高效的分词速度和灵活的自定义词典功能，成为中文自然语言处理领域的热门选择。",
+                "organizationName": "NLPchina"
+            },
+            {
+                "name": "NLPchina/nlp-lang",
+                "starCount": 1501,
+                "introduction": "NLPchina/nlp-lang是一个专注于自然语言处理（NLP）的开源项目，提供了多种语言处理工具和资源。该项目旨在帮助开发者和研究人员更高效地进行文本分析、语言建模和其他NLP相关任务。项目包含丰富的文档和示例代码，适合初学者和高级用户使用。",
+                "organizationName": "NLPchina"
+            }
+        ]
+    },
+    {
+        "name": "probml",
+        "starCount": 16404,
+        "rank": 962,
+        "introduction": "probml是一个专注于概率机器学习领域的开源组织，提供相关教程和代码实现。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": [
+            {
+                "name": "probml/pyprobml",
+                "starCount": 6735,
+                "introduction": "probml/pyprobml是一个Python库，专注于概率机器学习，提供了丰富的代码示例和教程，帮助用户理解和实现各种概率模型和算法。",
+                "organizationName": "probml"
+            },
+            {
+                "name": "probml/pml-book",
+                "starCount": 5193,
+                "introduction": "pml-book是一个开源项目，提供了关于概率机器学习（Probabilistic Machine Learning）的书籍内容，涵盖了从基础概念到高级算法的广泛主题，旨在帮助读者深入理解并应用概率模型。",
+                "organizationName": "probml"
+            },
+            {
+                "name": "probml/pmtk3",
+                "starCount": 1554,
+                "introduction": "pmtk3是一个用于概率建模和机器学习的MATLAB工具箱，提供了丰富的算法和工具，帮助用户快速实现和测试各种机器学习模型。",
+                "organizationName": "probml"
+            }
+        ]
+    },
+    {
+        "name": "oxford-cs-deepnlp-2017",
+        "starCount": 16262,
+        "rank": 977,
+        "introduction": "oxford-cs-deepnlp-2017是一个开源组织，专注于深度学习和自然语言处理领域的研究和教学。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": [
+            {
+                "name": "oxford-cs-deepnlp-2017/lectures",
+                "starCount": 15704,
+                "introduction": "oxford-cs-deepnlp-2017/lectures 是一个包含牛津大学2017年深度学习与自然语言处理课程讲义的开源项目，涵盖了深度学习在NLP领域的核心概念和应用。",
+                "organizationName": "oxford-cs-deepnlp-2017"
+            },
+            {
+                "name": "oxford-cs-deepnlp-2017/practical-1",
+                "starCount": 253,
+                "introduction": "oxford-cs-deepnlp-2017/practical-1 是牛津大学深度学习与自然语言处理课程的实践项目之一，专注于文本处理和神经网络的实现。项目提供了详细的代码示例和实验指导，帮助学生理解自然语言处理中的基础概念和技术。",
+                "organizationName": "oxford-cs-deepnlp-2017"
+            },
+            {
+                "name": "oxford-cs-deepnlp-2017/practical-2",
+                "starCount": 114,
+                "introduction": "oxford-cs-deepnlp-2017/practical-2 是一个用于深度学习与自然语言处理课程的实践项目，重点介绍了如何使用TensorFlow实现序列到序列（Seq2Seq）模型，涵盖文本生成与机器翻译等任务。",
+                "organizationName": "oxford-cs-deepnlp-2017"
+            }
+        ]
+    },
+    {
+        "name": "nltk",
+        "starCount": 16045,
+        "rank": 985,
+        "introduction": "NLTK是一个开源组织，专注于自然语言处理（NLP）工具和资源的开发与推广。",
+        "isKnowledgeSharingOrganization": true,
+        "isAIOrganization": true,
+        "repoIntroductionList": [
+            {
+                "name": "nltk/nltk",
+                "starCount": 14015,
+                "introduction": "NLTK（Natural Language Toolkit）是一个用于处理人类语言数据的Python库。它提供了易于使用的接口，支持文本处理、分词、词性标注、命名实体识别、句法分析等多种自然语言处理任务。NLTK广泛用于教育、研究和开发领域，是自然语言处理领域的经典工具之一。",
+                "organizationName": "nltk"
+            },
+            {
+                "name": "nltk/nltk_data",
+                "starCount": 1647,
+                "introduction": "nltk_data是Natural Language Toolkit（NLTK）的数据包仓库，提供了丰富的语言数据集和模型，支持自然语言处理任务。用户可以通过NLTK库轻松下载和使用这些资源，包括语料库、词性标注器、分块器等，广泛应用于文本分析、机器学习和语言学研究。",
+                "organizationName": "nltk"
+            },
+            {
+                "name": "nltk/nltk_book",
+                "starCount": 409,
+                "introduction": "nltk/nltk_book是一个关于自然语言处理（NLP）的开源教程项目，基于NLTK库。它提供了丰富的示例代码和详细的解释，帮助用户理解和应用NLP技术，涵盖文本处理、语言分析等多个方面。",
+                "organizationName": "nltk"
+            }
+        ]
+    }
+]

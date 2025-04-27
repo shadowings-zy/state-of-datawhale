@@ -5,18 +5,6 @@ import styles from "./page.module.css";
 import * as echarts from "echarts";
 
 export default function Home() {
-  const names = [
-    "freeCodeCamp",
-    "TheAlgorithms",
-    "EbookFoundation",
-    "ossu",
-    "h5bp",
-    "doocs",
-    "jobbole",
-    "dair-ai",
-    "papers-we-love",
-    "datawhalechina",
-  ];
   const years = ["2024-1", "2024-5", "2024-9", "2024-12"];
   const generateRankingData = () => {
     const value = [

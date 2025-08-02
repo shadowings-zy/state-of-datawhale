@@ -45,9 +45,9 @@ const chatWithDeepSeek = async (prompt, aiKey) => {
         apiKey: aiKey,
         baseURL: 'https://ark.cn-beijing.volces.com/api/v3',
     });
-    
+
     const response = await arkClient.chat.completions.create({
-        model: "deepseek-v3-241226",
+        model: "ep-20250802203559-gjslg",
         messages: [{ role: "user", content: prompt }],
     });
     const resultString = response.choices[0].message.content;
@@ -61,7 +61,7 @@ const chatWithDeepSeek = async (prompt, aiKey) => {
  * @param {string} aiKey 大模型的key
  * @returns 组织介绍信息
  */
-const fetchOrganizationInfoByAI = async (organizationList, oldAllOrganizationIntroduction, aiKey) => {
+const fetchOrganizationInfoByAI = async (organizationList, oldAllOrganizationIntroduction, monthKey, aiKey) => {
     const output = []
     const startIndex = 0;
     const endIndex = organizationList.length;
@@ -81,9 +81,20 @@ const fetchOrganizationInfoByAI = async (organizationList, oldAllOrganizationInt
             const prompt = getAnalyzeOrganizationPrompt(organizationName, organizationUrl);
             result = await chatWithDeepSeek(prompt, aiKey);
         }
+        const newTimeline = {
+            ...organization.timeline,
+            [monthKey]: {
+                starCount: organization.starCount,
+                rank: organization.rank
+            }
+        }
         const resultWithOrganization = {
-            ...organization,
-            ...result
+            name: organization.name,
+            introduction: result.introduction,
+            isKnowledgeSharingOrganization: result.isKnowledgeSharingOrganization,
+            isAIOrganization: result.isAIOrganization,
+            timeline: newTimeline
+
         }
         output.push(resultWithOrganization);
         console.log("analysis index", i, "organization name", organizationName, "result", resultWithOrganization);

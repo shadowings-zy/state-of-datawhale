@@ -1,5 +1,11 @@
 const axios = require("axios");
 
+/**
+ * 使用Github的API获取组织信息
+ * @param {string} organizationName 组织名
+ * @param {string} token Github的token
+ * @returns 倒叙排列的组织详情
+ */
 const getGithubRepoByOrganizationName = async (organizationName, token = '') => {
   const output = [];
 
@@ -36,6 +42,14 @@ const getGithubRepoByOrganizationName = async (organizationName, token = '') => 
   return output.sort((a, b) => b.starCount - a.starCount);
 };
 
+
+/**
+ * 使用Github的API获取star数信息
+ * @param {string} organizationName 组织名
+ * @param {string} repo Github的仓库
+ * @param {string} token Github的token
+ * @returns 返回月度star数和月度总star数
+ */
 const getGithubStarCount = async (organizationName, repo, token = '') => {
   let output = { repoName: repo, monthlyStars: {}, monthlyTotalStars: {}, starCount: 0 };
 
@@ -65,8 +79,7 @@ const getGithubStarCount = async (organizationName, repo, token = '') => {
           output.monthlyStars[`${year}-${month}`] = 1;
           output.monthlyTotalStars[`${year}-${month}`] = totalStars;
         } else {
-          output.monthlyStars[`${year}-${month}`] =
-            output.monthlyStars[`${year}-${month}`] + 1;
+          output.monthlyStars[`${year}-${month}`] = output.monthlyStars[`${year}-${month}`] + 1;
           output.monthlyTotalStars[`${year}-${month}`] = totalStars;
         }
       });
@@ -85,7 +98,7 @@ const getGithubStarCount = async (organizationName, repo, token = '') => {
 /**
  * 获取Github组织及仓库的star信息
  * @param {string} organizationName 组织名
- * @param {string} token Github token
+ * @param {string} token Github的token
  * @returns 
  */
 const fetchOrganizationRepoDetail = async (organizationName, token) => {

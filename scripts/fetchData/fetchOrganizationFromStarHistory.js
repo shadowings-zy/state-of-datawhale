@@ -1,6 +1,11 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
+/**
+ * 从starHistory网站中获取开源组织列表
+ * @param {number} page 页数
+ * @returns 组织列表
+ */
 const getOrganizationList = async (page) => {
   const output = [];
 

@@ -1,5 +1,11 @@
 const OpenAI = require('openai');
 
+/**
+ * 构造分析github组织的提示词
+ * @param {Array} organizationName 组织名
+ * @param {Array} organizationUrl 组织的链接
+ * @returns 提示词
+ */
 const getAnalyzeOrganizationPrompt = (organizationName, organizationUrl) => {
     const PROMPT = [
         `你是一名github开源组织分析师，你需要访问给定的开源组织的github主页，生成一段100字以内的开源组织介绍，并判断是否为知识分享类的开源组织，以及是否为和AI相关的开源组织。`,
@@ -12,6 +18,12 @@ const getAnalyzeOrganizationPrompt = (organizationName, organizationUrl) => {
     return PROMPT.join("\n");
 }
 
+/**
+ * 构造分析仓库的提示词
+ * @param {Array} repoName 仓库名
+ * @param {Array} repoUrl 仓库的链接
+ * @returns 提示词
+ */
 const getAnalyzeRepoPrompt = (repoName, repoUrl) => {
     const PROMPT = [
         `你是一名github开源组织分析师，你需要访问给定的开源项目，生成一段100字以内的开源项目介绍。`,
@@ -22,6 +34,12 @@ const getAnalyzeRepoPrompt = (repoName, repoUrl) => {
     return PROMPT.join("\n");
 }
 
+/**
+ * 请求火山引擎的大模型服务
+ * @param {Array} prompt 提示词
+ * @param {Array} aiKey 大模型的key
+ * @returns 提示词
+ */
 const chatWithDeepSeek = async (prompt, aiKey) => {
     const arkClient = new OpenAI({
         apiKey: aiKey,
@@ -40,8 +58,8 @@ const chatWithDeepSeek = async (prompt, aiKey) => {
  * 根据组织列表获取组织介绍
  * @param {Array} organizationList 组织列表
  * @param {Array} oldAllOrganizationIntroduction 旧的组织介绍列表
- * @param {string} aiKey AI key
- * @returns 
+ * @param {string} aiKey 大模型的key
+ * @returns 组织介绍信息
  */
 const fetchOrganizationInfoByAI = async (organizationList, oldAllOrganizationIntroduction, aiKey) => {
     const output = []
@@ -79,7 +97,7 @@ const fetchOrganizationInfoByAI = async (organizationList, oldAllOrganizationInt
  * @param {string} organizationName 组织名
  * @param {Array} repoList 仓库列表
  * @param {string} aiKey AI key
- * @returns 
+ * @returns 仓库介绍信息
  */
 const fetchRepoInfoByAI = async (organizationName, repoList, aiKey) => {
     const output = []

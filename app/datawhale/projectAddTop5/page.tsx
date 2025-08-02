@@ -3,43 +3,20 @@
 import { useEffect } from "react";
 import styles from "./page.module.css";
 import * as echarts from "echarts";
+import datasource from "../../assets/datasource.json"
 
-const source = [
-  {
-    name: 'team-learning-program',
-    starCount: 835,
-    monthlyStars: { '2025-1': 0, '2025-2': 2, '2025-3': 6, '2025-4': 7 },
-    monthlyTotalStars: { '2025-1': 0, '2025-2': 822, '2025-3': 828, '2025-4': 835 }
-  },
-  {
-    name: 'unlock-deepseek',
-    starCount: 629,
-    monthlyStars: { '2025-1': 3, '2025-2': 546, '2025-3': 64, '2025-4': 16 },
-    monthlyTotalStars: { '2025-1': 3, '2025-2': 549, '2025-3': 613, '2025-4': 629 }
-  },
-  {
-    name: 'hugging-vis',
-    starCount: 147,
-    monthlyStars: { '2025-1': 0, '2025-2': 12, '2025-3': 11, '2025-4': 5 },
-    monthlyTotalStars: { '2025-1': 0, '2025-2': 131, '2025-3': 142, '2025-4': 147 }
-  },
-  {
-    name: 'wow-agent',
-    starCount: 93,
-    monthlyStars: { '2025-1': 29, '2025-2': 47, '2025-3': 10, '2025-4': 7 },
-    monthlyTotalStars: { '2025-1': 29, '2025-2': 76, '2025-3': 86, '2025-4': 93 }
-  }
-]
+const source = datasource.projectAddTop5Info
 
 export default function Home() {
   const generateSeriesList = () => {
     const seriesList: any[] = [];
     source.forEach((item) => {
-      const data = Object.keys(item.monthlyStars).reduce((acc, month) => {
-        const curr = item.monthlyStars[month as keyof typeof item.monthlyStars] || 0;
-        acc.push(acc[acc.length - 1] + curr);
-        return acc;
-      }, [0]);
+      const data = Object.keys(item.monthlyTotalStars).map((month) => {
+        const current = item.monthlyTotalStars[month as keyof typeof item.monthlyTotalStars] || 0;
+        const previousKey = `${month.split("-")[0]}-1` as keyof typeof item.monthlyTotalStars
+        const previous = item.monthlyTotalStars[previousKey] || 0;
+        return current - previous
+      });
       seriesList.push({
         name: item.name,
         type: 'line',
@@ -63,9 +40,9 @@ export default function Home() {
   useEffect(() => {
     const myChart = echarts.init(document.getElementById("echart"));
     const option = {
-      // animationDuration: 10000,
+      // animationDuration: 1000,
       title: {
-        text: 'Datawhale新创建的项目Star增长数'
+        text: 'Datawhale项目本年度Star增长数Top5'
       },
       tooltip: {
         trigger: 'item'

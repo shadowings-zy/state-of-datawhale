@@ -33,7 +33,7 @@ const main = async () => {
   const aiToken = envObject.aiToken;
   const githubToken = envObject.githubToken;
 
-  fse.ensureDirSync(path.join(__dirname, `../data/${KEY}`));
+  fse.ensureDirSync(path.join(__dirname, `../../data/${KEY}`));
 
   // 从starHistory网站中获取开源组织列表
   const { organizationList, top10KnowledgeSharingOrganization } = await fetchOrganizationFromStarHistory(10, TOP_10_KNOWLEDGE_SHARING_ORGANIZATION);
@@ -46,34 +46,34 @@ const main = async () => {
   const output = await fetchOrganizationInfoByAI(JSON.parse(allOrganization), JSON.parse(oldAllOrganizationIntroduction), KEY, aiToken);
   ensureDirAndWriteFile(ALL_ORGANIZATION_INTRODUCTION_PATH, JSON.stringify(output));
 
-  // // 获取Datawhale的仓库列表和仓库详情
-  // const { repoList, repoDetailList } = await fetchOrganizationRepoDetail(DATAWHALE_ORGANIZATION_NAME, githubToken);
-  // ensureDirAndWriteFile(DATAWHALE_REPO_LIST_PATH, JSON.stringify(repoList));
-  // repoDetailList.forEach((repoDetail) => {
-  //   ensureDirAndWriteFile(
-  //     path.join(__dirname, `../data/${KEY}/${DATAWHALE_ORGANIZATION_NAME}/repoDetail/${repoDetail.repoName}.json`),
-  //     JSON.stringify(repoDetail)
-  //   );
-  // });
+  // 获取Datawhale的仓库列表和仓库详情
+  const { repoList, repoDetailList } = await fetchOrganizationRepoDetail(DATAWHALE_ORGANIZATION_NAME, githubToken);
+  ensureDirAndWriteFile(DATAWHALE_REPO_LIST_PATH, JSON.stringify(repoList));
+  repoDetailList.forEach((repoDetail) => {
+    ensureDirAndWriteFile(
+      path.join(__dirname, `../../data/${KEY}/${DATAWHALE_ORGANIZATION_NAME}/repoDetail/${repoDetail.repoName}.json`),
+      JSON.stringify(repoDetail)
+    );
+  });
 
-  // // 获取StarHistory排名前1000的组织中，知识分享类组织的top3的仓库列表，以及它们是用来干什么的
-  // const allOrganizationIntroduction = fs.readFileSync(ALL_ORGANIZATION_INTRODUCTION_PATH, "utf-8");
-  // const allOrganizationIntroductionList = JSON.parse(allOrganizationIntroduction);
-  // const knowledgeSharingOrganizationList = allOrganizationIntroductionList.filter((item) => item.isKnowledgeSharingOrganization && item.isAIOrganization && item.name !== DATAWHALE_ORGANIZATION_NAME);
-  // const aiKnowledgeSharingOrganizationList = [];
-  // for (const organization of knowledgeSharingOrganizationList) {
-  //   const repoList = await getGithubRepoByOrganizationName(organization.name, githubToken)
-  //   const top3RepoList = repoList.slice(0, 3);
-  //   const repoIntroductionList = await fetchRepoInfoByAI(organization.name, top3RepoList, aiToken);
-  //   aiKnowledgeSharingOrganizationList.push({
-  //     ...organization,
-  //     repoIntroductionList
-  //   });
-  // }
-  // ensureDirAndWriteFile(
-  //   path.join(__dirname, `../data/${KEY}/aiKnowledgeSharingOrganization.json`),
-  //   JSON.stringify(aiKnowledgeSharingOrganizationList)
-  // );
+  // 获取StarHistory排名前1000的组织中，知识分享类组织的top3的仓库列表，以及它们是用来干什么的
+  const allOrganizationIntroduction = fs.readFileSync(ALL_ORGANIZATION_INTRODUCTION_PATH, "utf-8");
+  const allOrganizationIntroductionList = JSON.parse(allOrganizationIntroduction);
+  const knowledgeSharingOrganizationList = allOrganizationIntroductionList.filter((item) => item.isKnowledgeSharingOrganization && item.isAIOrganization && item.name !== DATAWHALE_ORGANIZATION_NAME);
+  const aiKnowledgeSharingOrganizationList = [];
+  for (const organization of knowledgeSharingOrganizationList) {
+    const repoList = await getGithubRepoByOrganizationName(organization.name, githubToken)
+    const top3RepoList = repoList.slice(0, 3);
+    const repoIntroductionList = await fetchRepoInfoByAI(organization.name, top3RepoList, aiToken);
+    aiKnowledgeSharingOrganizationList.push({
+      ...organization,
+      repoIntroductionList
+    });
+  }
+  ensureDirAndWriteFile(
+    path.join(__dirname, `../../data/${KEY}/aiKnowledgeSharingOrganization.json`),
+    JSON.stringify(aiKnowledgeSharingOrganizationList)
+  );
 }
 
 main();

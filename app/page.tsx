@@ -8,17 +8,22 @@ export default function Home() {
     <div className={styles.page}>
       <Link href="/datawhale/project">
         <div className={styles.link}>
-          <h2>Datawhale项目Star数</h2>
+          <h2>Datawhale超过1000Star项目的Star数</h2>
         </div>
       </Link>
       <Link href="/datawhale/projectAdd">
         <div className={styles.link}>
-          <h2>Datawhale项目Star增长数</h2>
+          <h2>Datawhale超过1000Star项目的本年度Star增长数</h2>
         </div>
       </Link>
-      <Link href="/datawhale/newProjectAdd">
+      <Link href="/datawhale/projectAddTop5">
         <div className={styles.link}>
-          <h2>Datawhale新创建的项目Star增长数</h2>
+          <h2>Datawhale项目本年度Star增长数Top5</h2>
+        </div>
+      </Link>
+      <Link href="/datawhale/newProjectAddTop3">
+        <div className={styles.link}>
+          <h2>Datawhale新创建的项目Star增长数Top3</h2>
         </div>
       </Link>
       <Link href="/organization/rank">

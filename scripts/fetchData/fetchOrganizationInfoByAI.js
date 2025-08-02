@@ -72,20 +72,32 @@ const fetchOrganizationInfoByAI = async (organizationList, oldAllOrganizationInt
         const oldOrganization = oldAllOrganizationIntroduction.find((item) => item.name === organizationName);
         let result = null;
         if (oldOrganization) {
+            const newTimeline = {
+                ...oldOrganization.timeline,
+                [monthKey]: {
+                    starCount: organization.starCount,
+                    rank: organization.rank
+                }
+            }
             result = {
                 introduction: oldOrganization.introduction,
                 isKnowledgeSharingOrganization: oldOrganization.isKnowledgeSharingOrganization,
-                isAIOrganization: oldOrganization.isAIOrganization
+                isAIOrganization: oldOrganization.isAIOrganization,
+                timeline: newTimeline
             }
         } else {
             const prompt = getAnalyzeOrganizationPrompt(organizationName, organizationUrl);
-            result = await chatWithDeepSeek(prompt, aiKey);
-        }
-        const newTimeline = {
-            ...organization.timeline,
-            [monthKey]: {
-                starCount: organization.starCount,
-                rank: organization.rank
+            const aiResult = await chatWithDeepSeek(prompt, aiKey);
+            result = {
+                introduction: aiResult.introduction,
+                isKnowledgeSharingOrganization: aiResult.isKnowledgeSharingOrganization,
+                isAIOrganization: aiResult.isAIOrganization,
+                timeline: {
+                    [monthKey]: {
+                        starCount: organization.starCount,
+                        rank: organization.rank
+                    }
+                }
             }
         }
         const resultWithOrganization = {
@@ -93,7 +105,7 @@ const fetchOrganizationInfoByAI = async (organizationList, oldAllOrganizationInt
             introduction: result.introduction,
             isKnowledgeSharingOrganization: result.isKnowledgeSharingOrganization,
             isAIOrganization: result.isAIOrganization,
-            timeline: newTimeline
+            timeline: result.timeline
 
         }
         output.push(resultWithOrganization);

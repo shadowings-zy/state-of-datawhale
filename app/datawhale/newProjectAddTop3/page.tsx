@@ -5,7 +5,7 @@ import styles from "./page.module.css";
 import * as echarts from "echarts";
 import datasource from "../../assets/datasource.json"
 
-const source = datasource.projectAddInfo
+const source = datasource.newProjectAddTop3Info
 
 export default function Home() {
   const generateSeriesList = () => {
@@ -27,6 +27,11 @@ export default function Home() {
           distance: 20,
         },
         data: data,
+        label: {
+          show: true,
+          position: 'top',
+          formatter: '{c}'
+        }
       });
     });
     return seriesList;
@@ -35,9 +40,9 @@ export default function Home() {
   useEffect(() => {
     const myChart = echarts.init(document.getElementById("echart"));
     const option = {
-      // animationDuration: 5000,
+      // animationDuration: 10000,
       title: {
-        text: 'Datawhale项目本年度Star增长数'
+        text: 'Datawhale新创建的项目本年度Star增长数Top3'
       },
       tooltip: {
         trigger: 'item'

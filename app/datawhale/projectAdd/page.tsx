@@ -35,7 +35,7 @@ export default function Home() {
   useEffect(() => {
     const myChart = echarts.init(document.getElementById("echart"));
     const option = {
-      // animationDuration: 5000,
+      animationDuration: 5000,
       title: {
         text: 'Datawhale项目本年度Star增长数'
       },

@@ -1,0 +1,1002 @@
+[
+  {
+    "name": "microsoft",
+    "starCount": 3006218,
+    "rank": 1
+  },
+  {
+    "name": "google",
+    "starCount": 1880415,
+    "rank": 2
+  },
+  {
+    "name": "apache",
+    "starCount": 1168333,
+    "rank": 3
+  },
+  {
+    "name": "facebook",
+    "starCount": 1003978,
+    "rank": 4
+  },
+  {
+    "name": "alibaba",
+    "starCount": 788295,
+    "rank": 5
+  },
+  {
+    "name": "facebookresearch",
+    "starCount": 773395,
+    "rank": 6
+  },
+  {
+    "name": "vuejs",
+    "starCount": 610541,
+    "rank": 7
+  },
+  {
+    "name": "openai",
+    "starCount": 531994,
+    "rank": 8
+  },
+  {
+    "name": "Tencent",
+    "starCount": 514860,
+    "rank": 9
+  },
+  {
+    "name": "tensorflow",
+    "starCount": 480175,
+    "rank": 10
+  },
+  {
+    "name": "freeCodeCamp",
+    "starCount": 471678,
+    "rank": 11
+  },
+  {
+    "name": "github",
+    "starCount": 450254,
+    "rank": 12
+  },
+  {
+    "name": "huggingface",
+    "starCount": 436046,
+    "rank": 13
+  },
+  {
+    "name": "vercel",
+    "starCount": 428857,
+    "rank": 14
+  },
+  {
+    "name": "dotnet",
+    "starCount": 420975,
+    "rank": 15
+  },
+  {
+    "name": "TheAlgorithms",
+    "starCount": 406159,
+    "rank": 16
+  },
+  {
+    "name": "airbnb",
+    "starCount": 381875,
+    "rank": 17
+  },
+  {
+    "name": "fossasia",
+    "starCount": 361794,
+    "rank": 18
+  },
+  {
+    "name": "facebookarchive",
+    "starCount": 351753,
+    "rank": 19
+  },
+  {
+    "name": "symfony",
+    "starCount": 349653,
+    "rank": 20
+  },
+  {
+    "name": "EbookFoundation",
+    "starCount": 344788,
+    "rank": 21
+  },
+  {
+    "name": "rust-lang",
+    "starCount": 340387,
+    "rank": 22
+  },
+  {
+    "name": "hashicorp",
+    "starCount": 308750,
+    "rank": 23
+  },
+  {
+    "name": "angular",
+    "starCount": 300293,
+    "rank": 24
+  },
+  {
+    "name": "square",
+    "starCount": 294347,
+    "rank": 25
+  },
+  {
+    "name": "mozilla",
+    "starCount": 287692,
+    "rank": 26
+  },
+  {
+    "name": "NVIDIA",
+    "starCount": 287133,
+    "rank": 27
+  },
+  {
+    "name": "kubernetes",
+    "starCount": 286220,
+    "rank": 28
+  },
+  {
+    "name": "shadowsocks",
+    "starCount": 241175,
+    "rank": 29
+  },
+  {
+    "name": "flutter",
+    "starCount": 237590,
+    "rank": 30
+  },
+  {
+    "name": "golang",
+    "starCount": 235617,
+    "rank": 31
+  },
+  {
+    "name": "Netflix",
+    "starCount": 233111,
+    "rank": 32
+  },
+  {
+    "name": "nodejs",
+    "starCount": 226534,
+    "rank": 33
+  },
+  {
+    "name": "Azure",
+    "starCount": 226380,
+    "rank": 34
+  },
+  {
+    "name": "PacktPublishing",
+    "starCount": 225402,
+    "rank": 35
+  },
+  {
+    "name": "aws",
+    "starCount": 223872,
+    "rank": 36
+  },
+  {
+    "name": "twbs",
+    "starCount": 217006,
+    "rank": 37
+  },
+  {
+    "name": "pytorch",
+    "starCount": 212433,
+    "rank": 38
+  },
+  {
+    "name": "spring-projects",
+    "starCount": 210801,
+    "rank": 39
+  },
+  {
+    "name": "laravel",
+    "starCount": 209448,
+    "rank": 40
+  },
+  {
+    "name": "ossu",
+    "starCount": 205251,
+    "rank": 41
+  },
+  {
+    "name": "twitter",
+    "starCount": 203730,
+    "rank": 42
+  },
+  {
+    "name": "JetBrains",
+    "starCount": 202115,
+    "rank": 43
+  },
+  {
+    "name": "apple",
+    "starCount": 200884,
+    "rank": 44
+  },
+  {
+    "name": "aws-samples",
+    "starCount": 197476,
+    "rank": 45
+  },
+  {
+    "name": "spatie",
+    "starCount": 190058,
+    "rank": 46
+  },
+  {
+    "name": "GoogleCloudPlatform",
+    "starCount": 189475,
+    "rank": 47
+  },
+  {
+    "name": "ethereum",
+    "starCount": 179940,
+    "rank": 48
+  },
+  {
+    "name": "ant-design",
+    "starCount": 179892,
+    "rank": 49
+  },
+  {
+    "name": "grafana",
+    "starCount": 179145,
+    "rank": 50
+  },
+  {
+    "name": "docker",
+    "starCount": 177273,
+    "rank": 51
+  },
+  {
+    "name": "ohmyzsh",
+    "starCount": 174963,
+    "rank": 52
+  },
+  {
+    "name": "google-deepmind",
+    "starCount": 174362,
+    "rank": 53
+  },
+  {
+    "name": "redis",
+    "starCount": 172352,
+    "rank": 54
+  },
+  {
+    "name": "electron",
+    "starCount": 169705,
+    "rank": 55
+  },
+  {
+    "name": "awslabs",
+    "starCount": 165328,
+    "rank": 56
+  },
+  {
+    "name": "cloudflare",
+    "starCount": 162549,
+    "rank": 57
+  },
+  {
+    "name": "Shopify",
+    "starCount": 162230,
+    "rank": 58
+  },
+  {
+    "name": "ReactiveX",
+    "starCount": 157860,
+    "rank": 59
+  },
+  {
+    "name": "doocs",
+    "starCount": 156954,
+    "rank": 60
+  },
+  {
+    "name": "Unity-Technologies",
+    "starCount": 156893,
+    "rank": 61
+  },
+  {
+    "name": "h5bp",
+    "starCount": 155611,
+    "rank": 62
+  },
+  {
+    "name": "NVlabs",
+    "starCount": 154599,
+    "rank": 63
+  },
+  {
+    "name": "reduxjs",
+    "starCount": 152667,
+    "rank": 64
+  },
+  {
+    "name": "denoland",
+    "starCount": 139755,
+    "rank": 65
+  },
+  {
+    "name": "ytdl-org",
+    "starCount": 133491,
+    "rank": 66
+  },
+  {
+    "name": "d3",
+    "starCount": 132927,
+    "rank": 67
+  },
+  {
+    "name": "datawhalechina",
+    "starCount": 132904,
+    "rank": 68
+  },
+  {
+    "name": "thoughtbot",
+    "starCount": 130698,
+    "rank": 69
+  },
+  {
+    "name": "Automattic",
+    "starCount": 128043,
+    "rank": 70
+  },
+  {
+    "name": "tc39",
+    "starCount": 127986,
+    "rank": 71
+  },
+  {
+    "name": "sveltejs",
+    "starCount": 126885,
+    "rank": 72
+  },
+  {
+    "name": "expressjs",
+    "starCount": 125955,
+    "rank": 73
+  },
+  {
+    "name": "open-mmlab",
+    "starCount": 125638,
+    "rank": 74
+  },
+  {
+    "name": "ionic-team",
+    "starCount": 123253,
+    "rank": 75
+  },
+  {
+    "name": "dair-ai",
+    "starCount": 122884,
+    "rank": 76
+  },
+  {
+    "name": "doctrine",
+    "starCount": 122579,
+    "rank": 77
+  },
+  {
+    "name": "Genymobile",
+    "starCount": 122078,
+    "rank": 78
+  },
+  {
+    "name": "godotengine",
+    "starCount": 121793,
+    "rank": 79
+  },
+  {
+    "name": "Homebrew",
+    "starCount": 121470,
+    "rank": 80
+  },
+  {
+    "name": "jobbole",
+    "starCount": 120087,
+    "rank": 81
+  },
+  {
+    "name": "rails",
+    "starCount": 118740,
+    "rank": 82
+  },
+  {
+    "name": "ansible",
+    "starCount": 116367,
+    "rank": 83
+  },
+  {
+    "name": "gothinkster",
+    "starCount": 115776,
+    "rank": 84
+  },
+  {
+    "name": "prometheus",
+    "starCount": 112748,
+    "rank": 85
+  },
+  {
+    "name": "googleapis",
+    "starCount": 112406,
+    "rank": 86
+  },
+  {
+    "name": "ElemeFE",
+    "starCount": 111999,
+    "rank": 87
+  },
+  {
+    "name": "pallets",
+    "starCount": 109643,
+    "rank": 88
+  },
+  {
+    "name": "nuxt",
+    "starCount": 109601,
+    "rank": 89
+  },
+  {
+    "name": "tauri-apps",
+    "starCount": 108824,
+    "rank": 90
+  },
+  {
+    "name": "OWASP",
+    "starCount": 108007,
+    "rank": 91
+  },
+  {
+    "name": "home-assistant",
+    "starCount": 106184,
+    "rank": 92
+  },
+  {
+    "name": "googlearchive",
+    "starCount": 105580,
+    "rank": 93
+  },
+  {
+    "name": "mui",
+    "starCount": 105370,
+    "rank": 94
+  },
+  {
+    "name": "GoogleChrome",
+    "starCount": 105328,
+    "rank": 95
+  },
+  {
+    "name": "didi",
+    "starCount": 105070,
+    "rank": 96
+  },
+  {
+    "name": "reactjs",
+    "starCount": 104821,
+    "rank": 97
+  },
+  {
+    "name": "python",
+    "starCount": 103760,
+    "rank": 98
+  },
+  {
+    "name": "mapbox",
+    "starCount": 103498,
+    "rank": 99
+  },
+  {
+    "name": "spotify",
+    "starCount": 102694,
+    "rank": 100
+  },
+  {
+    "name": "uber",
+    "starCount": 100970,
+    "rank": 101
+  },
+  {
+    "name": "grpc",
+    "starCount": 100358,
+    "rank": 102
+  },
+  {
+    "name": "neovim",
+    "starCount": 100023,
+    "rank": 103
+  },
+  {
+    "name": "bytedance",
+    "starCount": 99226,
+    "rank": 104
+  },
+  {
+    "name": "socketio",
+    "starCount": 99045,
+    "rank": 105
+  },
+  {
+    "name": "nestjs",
+    "starCount": 98883,
+    "rank": 106
+  },
+  {
+    "name": "Kong",
+    "starCount": 98737,
+    "rank": 107
+  },
+  {
+    "name": "django",
+    "starCount": 97139,
+    "rank": 108
+  },
+  {
+    "name": "opencv",
+    "starCount": 96827,
+    "rank": 109
+  },
+  {
+    "name": "firebase",
+    "starCount": 96430,
+    "rank": 110
+  },
+  {
+    "name": "IBM",
+    "starCount": 95821,
+    "rank": 111
+  },
+  {
+    "name": "webpack",
+    "starCount": 95379,
+    "rank": 112
+  },
+  {
+    "name": "FormidableLabs",
+    "starCount": 95375,
+    "rank": 113
+  },
+  {
+    "name": "jquery",
+    "starCount": 95337,
+    "rank": 114
+  },
+  {
+    "name": "storybookjs",
+    "starCount": 95331,
+    "rank": 115
+  },
+  {
+    "name": "jenkinsci",
+    "starCount": 94817,
+    "rank": 116
+  },
+  {
+    "name": "Hack-with-Github",
+    "starCount": 94729,
+    "rank": 117
+  },
+  {
+    "name": "puppeteer",
+    "starCount": 92958,
+    "rank": 118
+  },
+  {
+    "name": "mongodb",
+    "starCount": 92739,
+    "rank": 119
+  },
+  {
+    "name": "bilibili",
+    "starCount": 92644,
+    "rank": 120
+  },
+  {
+    "name": "projectdiscovery",
+    "starCount": 92510,
+    "rank": 121
+  },
+  {
+    "name": "intel",
+    "starCount": 92315,
+    "rank": 122
+  },
+  {
+    "name": "fastai",
+    "starCount": 92259,
+    "rank": 123
+  },
+  {
+    "name": "getsentry",
+    "starCount": 91084,
+    "rank": 124
+  },
+  {
+    "name": "bitcoin",
+    "starCount": 90698,
+    "rank": 125
+  },
+  {
+    "name": "jazzband",
+    "starCount": 90168,
+    "rank": 126
+  },
+  {
+    "name": "vitejs",
+    "starCount": 90054,
+    "rank": 127
+  },
+  {
+    "name": "papers-we-love",
+    "starCount": 89591,
+    "rank": 128
+  },
+  {
+    "name": "moby",
+    "starCount": 89401,
+    "rank": 129
+  },
+  {
+    "name": "Yalantis",
+    "starCount": 88371,
+    "rank": 130
+  },
+  {
+    "name": "mtdvio",
+    "starCount": 88319,
+    "rank": 131
+  },
+  {
+    "name": "udacity",
+    "starCount": 87225,
+    "rank": 132
+  },
+  {
+    "name": "atom",
+    "starCount": 86194,
+    "rank": 133
+  },
+  {
+    "name": "gin-gonic",
+    "starCount": 86034,
+    "rank": 134
+  },
+  {
+    "name": "tokio-rs",
+    "starCount": 86031,
+    "rank": 135
+  },
+  {
+    "name": "keras-team",
+    "starCount": 86000,
+    "rank": 136
+  },
+  {
+    "name": "graphql",
+    "starCount": 85993,
+    "rank": 137
+  },
+  {
+    "name": "pypa",
+    "starCount": 84093,
+    "rank": 138
+  },
+  {
+    "name": "thunlp",
+    "starCount": 83768,
+    "rank": 139
+  },
+  {
+    "name": "FortAwesome",
+    "starCount": 83637,
+    "rank": 140
+  },
+  {
+    "name": "plotly",
+    "starCount": 81517,
+    "rank": 141
+  },
+  {
+    "name": "salesforce",
+    "starCount": 81193,
+    "rank": 142
+  },
+  {
+    "name": "nextcloud",
+    "starCount": 80728,
+    "rank": 143
+  },
+  {
+    "name": "prettier",
+    "starCount": 80583,
+    "rank": 144
+  },
+  {
+    "name": "gohugoio",
+    "starCount": 80177,
+    "rank": 145
+  },
+  {
+    "name": "Ramotion",
+    "starCount": 79893,
+    "rank": 146
+  },
+  {
+    "name": "Kotlin",
+    "starCount": 79553,
+    "rank": 147
+  },
+  {
+    "name": "expo",
+    "starCount": 78869,
+    "rank": 148
+  },
+  {
+    "name": "babel",
+    "starCount": 78837,
+    "rank": 149
+  },
+  {
+    "name": "encode",
+    "starCount": 78153,
+    "rank": 150
+  },
+  {
+    "name": "apollographql",
+    "starCount": 77952,
+    "rank": 151
+  },
+  {
+    "name": "pingcap",
+    "starCount": 77264,
+    "rank": 152
+  },
+  {
+    "name": "signalapp",
+    "starCount": 76849,
+    "rank": 153
+  },
+  {
+    "name": "codrops",
+    "starCount": 76694,
+    "rank": 154
+  },
+  {
+    "name": "adobe",
+    "starCount": 76679,
+    "rank": 155
+  },
+  {
+    "name": "baidu",
+    "starCount": 76642,
+    "rank": 156
+  },
+  {
+    "name": "ValveSoftware",
+    "starCount": 76042,
+    "rank": 157
+  },
+  {
+    "name": "strapi",
+    "starCount": 75655,
+    "rank": 158
+  },
+  {
+    "name": "tesseract-ocr",
+    "starCount": 75298,
+    "rank": 159
+  },
+  {
+    "name": "zsh-users",
+    "starCount": 74874,
+    "rank": 160
+  },
+  {
+    "name": "minio",
+    "starCount": 74420,
+    "rank": 161
+  },
+  {
+    "name": "akveo",
+    "starCount": 74392,
+    "rank": 162
+  },
+  {
+    "name": "ipfs",
+    "starCount": 74190,
+    "rank": 163
+  },
+  {
+    "name": "syncthing",
+    "starCount": 74052,
+    "rank": 164
+  },
+  {
+    "name": "elastic",
+    "starCount": 73880,
+    "rank": 165
+  },
+  {
+    "name": "prisma",
+    "starCount": 73568,
+    "rank": 166
+  },
+  {
+    "name": "netdata",
+    "starCount": 73567,
+    "rank": 167
+  },
+  {
+    "name": "adafruit",
+    "starCount": 73469,
+    "rank": 168
+  },
+  {
+    "name": "PowerShell",
+    "starCount": 73459,
+    "rank": 169
+  },
+  {
+    "name": "linkedin",
+    "starCount": 72750,
+    "rank": 170
+  },
+  {
+    "name": "Azure-Samples",
+    "starCount": 72550,
+    "rank": 171
+  },
+  {
+    "name": "thephpleague",
+    "starCount": 72453,
+    "rank": 172
+  },
+  {
+    "name": "uber-go",
+    "starCount": 72357,
+    "rank": 173
+  },
+  {
+    "name": "swagger-api",
+    "starCount": 71823,
+    "rank": 174
+  },
+  {
+    "name": "termux",
+    "starCount": 71667,
+    "rank": 175
+  },
+  {
+    "name": "serverless",
+    "starCount": 70963,
+    "rank": 176
+  },
+  {
+    "name": "chartjs",
+    "starCount": 70548,
+    "rank": 177
+  },
+  {
+    "name": "caddyserver",
+    "starCount": 69281,
+    "rank": 178
+  },
+  {
+    "name": "containers",
+    "starCount": 68525,
+    "rank": 179
+  },
+  {
+    "name": "espressif",
+    "starCount": 68505,
+    "rank": 180
+  },
+  {
+    "name": "realm",
+    "starCount": 68360,
+    "rank": 181
+  },
+  {
+    "name": "moment",
+    "starCount": 68031,
+    "rank": 182
+  },
+  {
+    "name": "cypress-io",
+    "starCount": 67813,
+    "rank": 183
+  },
+  {
+    "name": "obsproject",
+    "starCount": 67403,
+    "rank": 184
+  },
+  {
+    "name": "creativetimofficial",
+    "starCount": 67286,
+    "rank": 185
+  },
+  {
+    "name": "Semantic-Org",
+    "starCount": 67286,
+    "rank": 186
+  },
+  {
+    "name": "hoppscotch",
+    "starCount": 67219,
+    "rank": 187
+  },
+  {
+    "name": "commaai",
+    "starCount": 66567,
+    "rank": 188
+  },
+  {
+    "name": "dmlc",
+    "starCount": 65753,
+    "rank": 189
+  },
+  {
+    "name": "frappe",
+    "starCount": 65669,
+    "rank": 190
+  },
+  {
+    "name": "scrapy",
+    "starCount": 65010,
+    "rank": 191
+  },
+  {
+    "name": "TryGhost",
+    "starCount": 64968,
+    "rank": 192
+  },
+  {
+    "name": "gatsbyjs",
+    "starCount": 64953,
+    "rank": 193
+  },
+  {
+    "name": "oracle",
+    "starCount": 64953,
+    "rank": 194
+  },
+  {
+    "name": "jekyll",
+    "starCount": 64787,
+    "rank": 195
+  },
+  {
+    "name": "OpnTec",
+    "starCount": 64615,
+    "rank": 196
+  },
+  {
+    "name": "php-fig",
+    "starCount": 64506,
+    "rank": 197
+  },
+  {
+    "name": "traefik",
+    "starCount": 64407,
+    "rank": 198
+  },
+  {
+    "name": "styled-components",
+    "starCount": 64161,
+    "rank": 199
+  },
+  {
+    "name": "postcss",
+    "starCount": 63701,
+    "rank": 200
+  }
+]

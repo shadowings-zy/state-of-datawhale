@@ -26,6 +26,11 @@ export default function Home() {
           <h2>Datawhale新创建的项目Star增长数Top3</h2>
         </div>
       </Link>
+      <Link href="/datawhale/newProjectAdd">
+        <div className={styles.link}>
+          <h2>Datawhale新创建的项目Star增长数</h2>
+        </div>
+      </Link>
       <Link href="/organization/rank">
         <div className={styles.link}>
           <h2>GitHub知识分享类组织Star数总排名</h2>
@@ -34,6 +39,11 @@ export default function Home() {
       <Link href="/organization/innerRank">
         <div className={styles.link}>
           <h2>GitHub知识分享类组织Star数排名</h2>
+        </div>
+      </Link>
+      <Link href="/organization/starCount">
+        <div className={styles.link}>
+          <h2>Datawhale组织Star数增长情况</h2>
         </div>
       </Link>
     </div>

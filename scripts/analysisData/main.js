@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { ensureDirAndWriteFile } = require("../util")
 
-const PREVIOUS_KEY = '2025-8'
+const PREVIOUS_KEY = '2025-1'
 const CURRENT_KEY = '2025-12'
 const MONTH_KEY = ['2025-1', '2025-2', '2025-3', '2025-4', '2025-5', '2025-6', '2025-7', '2025-8', '2025-9', '2025-10', '2025-11', '2025-12']
 
@@ -106,7 +106,7 @@ const getAddStarTop5Repo = () => {
     return result
 }
 
-const getAddStarTop3NewRepo = () => {
+const getAddStarNewRepo = () => {
     const previousData = fs.readFileSync(path.join(__dirname, `../data/${PREVIOUS_KEY}/repoList.json`), 'utf8')
     const currentData = fs.readFileSync(path.join(__dirname, `../data/${CURRENT_KEY}/repoList.json`), 'utf8')
 
@@ -118,11 +118,10 @@ const getAddStarTop3NewRepo = () => {
     })
 
     newRepoList.sort((a, b) => b.starCount - a.starCount)
-    const detailRepoList = joinRepoDetailByName(newRepoList)
-    const top5NewRepo = detailRepoList.slice(0, 3)
+    const detailRepoList = joinRepoDetailByName(newRepoList).slice(0, 6)
 
-    console.log(top5NewRepo)
-    return top5NewRepo
+    console.log(detailRepoList)
+    return detailRepoList
 }
 
 
@@ -132,7 +131,8 @@ const main = async () => {
     const projectInfo = getRepoStarMoreThan1000()
     const projectAddInfo = getRepoAddStarMoreThan1000()
     const projectAddTop5Info = getAddStarTop5Repo()
-    const newProjectAddTop3Info = getAddStarTop3NewRepo()
+    const newProjectAddInfo = getAddStarNewRepo()
+    const newProjectAddTop3Info = newProjectAddInfo.slice(0, 3)
 
     ensureDirAndWriteFile(
         DATASOURCE_PATH,
@@ -140,6 +140,7 @@ const main = async () => {
             projectInfo,
             projectAddInfo,
             projectAddTop5Info,
+            newProjectAddInfo,
             newProjectAddTop3Info,
             top10KnowledgeSharingOrganizationInfo
         })

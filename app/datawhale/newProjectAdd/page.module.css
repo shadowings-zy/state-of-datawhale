@@ -1,0 +1,14 @@
+.page {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+.chart {
+  width: 80vw;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 50px 0;
+}

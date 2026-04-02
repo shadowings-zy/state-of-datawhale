@@ -13,36 +13,33 @@ type CreateDatawhaleSeriesConfigOptions<T extends DatawhaleSourceItem> = {
   showLabel?: boolean;
 };
 
-export const DATAWHALE_START_YEAR = 2026;
-export const DATAWHALE_START_MONTH = 1;
+const startTime = `2025-12`;
+const endTime = `2026-3`;
+const previousKey = startTime;
 
-const shouldReadMonth = (month: string) => {
+const getMonthTimestamp = (month: string) => {
   const [year, monthIndex] = month.split("-").map(Number);
-  return year > DATAWHALE_START_YEAR || (year === DATAWHALE_START_YEAR && monthIndex >= DATAWHALE_START_MONTH);
+  return year * 12 + monthIndex;
 };
 
-export const filterProjectsWithStarsStartingFrom2026 = <T extends DatawhaleSourceItem>(source: readonly T[]) =>
-  source.filter((item) => {
-    const before2026 = Object.entries(item.monthly_total_stars).filter(([month]) => {
-      const [year, monthIndex] = month.split("-").map(Number);
-      return year < DATAWHALE_START_YEAR || (year === DATAWHALE_START_YEAR && monthIndex < DATAWHALE_START_MONTH);
-    });
+const shouldReadMonth = (month: string) => {
+  const currentMonth = getMonthTimestamp(month);
+  return (
+    currentMonth >= getMonthTimestamp(startTime) &&
+    currentMonth <= getMonthTimestamp(endTime)
+  );
+};
 
-    const from2026 = Object.entries(item.monthly_total_stars).filter(([month]) => {
-      const [year, monthIndex] = month.split("-").map(Number);
-      return year > DATAWHALE_START_YEAR || (year === DATAWHALE_START_YEAR && monthIndex >= DATAWHALE_START_MONTH);
-    });
-
-    return before2026.every(([, value]) => (value || 0) === 0) && from2026.some(([, value]) => (value || 0) > 0);
-  });
-
-const getMonthValue = <T extends DatawhaleSourceItem>(item: T, month: string, mode: DatawhaleSeriesMode) => {
+const getMonthValue = <T extends DatawhaleSourceItem>(
+  item: T,
+  month: string,
+  mode: DatawhaleSeriesMode,
+) => {
   if (mode === "total") {
     return item.monthly_total_stars[month] || 0;
   }
 
   const current = item.monthly_total_stars[month] || 0;
-  const previousKey = `${month.split("-")[0]}-1`;
   const previous = item.monthly_total_stars[previousKey] || 0;
   return current - previous;
 };
@@ -76,7 +73,9 @@ export const createDatawhaleSeriesConfig = <T extends DatawhaleSourceItem>({
   mode,
   showLabel = false,
 }: CreateDatawhaleSeriesConfigOptions<T>) => {
-  const months = Object.keys(source[0]?.monthly_total_stars ?? {}).filter(shouldReadMonth);
+  const months = Object.keys(source[0]?.monthly_total_stars ?? {}).filter(
+    shouldReadMonth,
+  );
 
   const generateSeriesList = () =>
     source.map((item) => {

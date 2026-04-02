@@ -4,34 +4,15 @@ import { useEffect } from "react";
 import styles from "./page.module.css";
 import * as echarts from "echarts";
 import datasource from "../../assets/datasource.json"
+import { createDatawhaleSeriesConfig } from "../chartUtils";
 
 const source = datasource.projectAddInfo
+const { months, generateSeriesList } = createDatawhaleSeriesConfig({
+  source,
+  mode: "yearlyGrowth",
+});
 
 export default function Home() {
-  const generateSeriesList = () => {
-    const seriesList: any[] = [];
-    source.forEach((item) => {
-      const data = Object.keys(item.monthly_total_stars).map((month) => {
-        const current = item.monthly_total_stars[month as keyof typeof item.monthly_total_stars] || 0;
-        const previousKey = `${month.split("-")[0]}-1` as keyof typeof item.monthly_total_stars
-        const previous = item.monthly_total_stars[previousKey] || 0;
-        return current - previous
-      });
-      seriesList.push({
-        name: item.name,
-        type: 'line',
-        smooth: true,
-        endLabel: {
-          show: true,
-          formatter: "{a}",
-          distance: 20,
-        },
-        data: data,
-      });
-    });
-    return seriesList;
-  };
-
   useEffect(() => {
     const myChart = echarts.init(document.getElementById("echart"));
     const option = {
@@ -62,7 +43,7 @@ export default function Home() {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: Object.keys(source[0].monthly_total_stars)
+        data: months
       },
       yAxis: {
         type: 'value'
@@ -70,7 +51,7 @@ export default function Home() {
       series: generateSeriesList()
     };
 
-    option && myChart.setOption(option);
+    myChart.setOption(option);
   }, []);
 
   return (

@@ -17,9 +17,22 @@ const startTime = `2025-12`;
 const endTime = `2026-3`;
 const previousKey = startTime;
 
-const getMonthTimestamp = (month: string) => {
+const parseMonth = (month: string) => {
   const [year, monthIndex] = month.split("-").map(Number);
+  return { year, monthIndex };
+};
+
+const getMonthTimestamp = (month: string) => {
+  const { year, monthIndex } = parseMonth(month);
   return year * 12 + monthIndex;
+};
+
+const mapMonthToNextMonthFirstDay = (month: string) => {
+  const { year, monthIndex } = parseMonth(month);
+  const nextYear = monthIndex === 12 ? year + 1 : year;
+  const nextMonthIndex = monthIndex === 12 ? 1 : monthIndex + 1;
+
+  return `${nextYear}-${String(nextMonthIndex).padStart(2, "0")}-01`;
 };
 
 const shouldReadMonth = (month: string) => {
@@ -73,13 +86,14 @@ export const createDatawhaleSeriesConfig = <T extends DatawhaleSourceItem>({
   mode,
   showLabel = false,
 }: CreateDatawhaleSeriesConfigOptions<T>) => {
-  const months = Object.keys(source[0]?.monthly_total_stars ?? {}).filter(
+  const monthKeys = Object.keys(source[0]?.monthly_total_stars ?? {}).filter(
     shouldReadMonth,
   );
+  const months = monthKeys.map(mapMonthToNextMonthFirstDay);
 
   const generateSeriesList = () =>
     source.map((item) => {
-      const data = months.map((month) => getMonthValue(item, month, mode));
+      const data = monthKeys.map((month) => getMonthValue(item, month, mode));
       return createLineSeries(item.name, data, showLabel);
     });
 

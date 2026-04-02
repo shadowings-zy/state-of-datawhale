@@ -11,10 +11,10 @@ export default function Home() {
   const generateSeriesList = () => {
     const seriesList: any[] = [];
     source.forEach((item) => {
-      const data = Object.keys(item.monthlyTotalStars).map((month) => {
-        const current = item.monthlyTotalStars[month as keyof typeof item.monthlyTotalStars] || 0;
-        const previousKey = `${month.split("-")[0]}-1` as keyof typeof item.monthlyTotalStars
-        const previous = item.monthlyTotalStars[previousKey] || 0;
+      const data = Object.keys(item.monthly_total_stars).map((month) => {
+        const current = item.monthly_total_stars[month as keyof typeof item.monthly_total_stars] || 0;
+        const previousKey = `${month.split("-")[0]}-1` as keyof typeof item.monthly_total_stars
+        const previous = item.monthly_total_stars[previousKey] || 0;
         return current - previous
       });
       seriesList.push({
@@ -67,7 +67,7 @@ export default function Home() {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: Object.keys(source[0].monthlyTotalStars)
+        data: Object.keys(source[0].monthly_total_stars)
       },
       yAxis: {
         type: 'value'

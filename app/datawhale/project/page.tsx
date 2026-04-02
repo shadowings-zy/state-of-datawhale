@@ -11,7 +11,7 @@ export default function Home() {
   const generateSeriesList = () => {
     const seriesList: any[] = [];
     source.forEach((item) => {
-      const data = Object.keys(item.monthlyTotalStars).map((month) => item.monthlyTotalStars[month as keyof typeof item.monthlyTotalStars] || 0);
+      const data = Object.keys(item.monthly_total_stars).map((month) => item.monthly_total_stars[month as keyof typeof item.monthly_total_stars] || 0);
       seriesList.push({
         name: item.name,
         type: 'line',
@@ -57,7 +57,7 @@ export default function Home() {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: Object.keys(source[0].monthlyTotalStars)
+        data: Object.keys(source[0].monthly_total_stars)
       },
       yAxis: {
         type: 'value',

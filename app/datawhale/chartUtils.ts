@@ -61,11 +61,6 @@ const createLineSeries = (name: string, data: number[], showLabel: boolean) => {
     name,
     type: "line",
     smooth: true,
-    endLabel: {
-      show: true,
-      formatter: "{a}",
-      distance: 20,
-    },
     data,
   };
 

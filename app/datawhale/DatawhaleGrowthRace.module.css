@@ -42,7 +42,8 @@
   flex-shrink: 0;
 }
 
-.backButton {
+.backButton,
+.playButton {
   height: 34px;
   border: 1px solid #cbd5e1;
   border-radius: 6px;
@@ -54,9 +55,23 @@
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
 }
 
-.backButton:hover {
+.backButton:hover,
+.playButton:hover {
   background: #f8fafc;
   border-color: #94a3b8;
+}
+
+.playButton {
+  min-width: 76px;
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 700;
+}
+
+.playButton:hover {
+  border-color: #1d4ed8;
+  background: #1d4ed8;
 }
 
 .field {
@@ -88,7 +103,8 @@
 }
 
 .chartPanel {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #fff;
@@ -97,8 +113,9 @@
 
 .chart {
   width: 100%;
-  height: calc(100vh - 132px);
-  min-height: 560px;
+  min-width: 1060px;
+  height: min(980px, 150vh);
+  min-height: calc(100vh - 132px);
 }
 
 @media (max-width: 760px) {
@@ -127,7 +144,8 @@
   }
 
   .chart {
-    height: 68vh;
-    min-height: 460px;
+    min-width: 980px;
+    height: min(980px, 150vh);
+    min-height: 760px;
   }
 }

@@ -107,6 +107,19 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
+      <button
+        className={styles.backButton}
+        type="button"
+        onClick={() => {
+          if (window.history.length > 1) {
+            window.history.back();
+            return;
+          }
+          window.location.href = "/";
+        }}
+      >
+        Back
+      </button>
       <div id="echart" className={styles.chart}></div>
     </div>
   );

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import datasource from "@/app/assets/datasource.json";
-import topOrganizations from "@/app/assets/2026-4/top_10_knowledge_sharing_organization.json";
+import datasource from "@/data/organization_datasource.json";
+import topOrganizations from "@/data/allOrganization/2026-4/top_10_knowledge_sharing_organization.json";
 import styles from "./page.module.css";
 
 type MonthKey = "2026-1" | "2026-2" | "2026-3";
@@ -111,14 +110,6 @@ const peerGrowthByName: Record<
     label: "EbookFoundation",
   },
 };
-
-const reportSources = [
-  "数据截取时间：2026-04-01",
-  "报告：《2026 年 1 至 3 月 Datawhale 项目及外部同类组织数据分析》",
-  "数据源：组织项目数据看板",
-  "数据源：开源组织排名站点",
-  "数据源：项目Star数历史站点",
-];
 
 function sumQuarter(series: MonthlySeries) {
   return monthKeys.reduce((sum, month) => sum + (series[month] ?? 0), 0);

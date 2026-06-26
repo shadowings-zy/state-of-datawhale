@@ -11,11 +11,9 @@ type CreateDatawhaleSeriesConfigOptions<T extends DatawhaleSourceItem> = {
   source: readonly T[];
   mode: DatawhaleSeriesMode;
   showLabel?: boolean;
+  fromMonth?: string;
+  toMonth?: string;
 };
-
-const startTime = `2025-12`;
-const endTime = `2026-3`;
-const previousKey = startTime;
 
 const parseMonth = (month: string) => {
   const [year, monthIndex] = month.split("-").map(Number);
@@ -35,11 +33,11 @@ const mapMonthToNextMonthFirstDay = (month: string) => {
   return `${nextYear}-${String(nextMonthIndex).padStart(2, "0")}-01`;
 };
 
-const shouldReadMonth = (month: string) => {
+const shouldReadMonth = (month: string, fromMonth: string, toMonth: string) => {
   const currentMonth = getMonthTimestamp(month);
   return (
-    currentMonth >= getMonthTimestamp(startTime) &&
-    currentMonth <= getMonthTimestamp(endTime)
+    currentMonth >= getMonthTimestamp(fromMonth) &&
+    currentMonth <= getMonthTimestamp(toMonth)
   );
 };
 
@@ -47,13 +45,14 @@ const getMonthValue = <T extends DatawhaleSourceItem>(
   item: T,
   month: string,
   mode: DatawhaleSeriesMode,
+  baseMonth: string,
 ) => {
   if (mode === "total") {
     return item.monthly_total_stars[month] || 0;
   }
 
   const current = item.monthly_total_stars[month] || 0;
-  const previous = item.monthly_total_stars[previousKey] || 0;
+  const previous = item.monthly_total_stars[baseMonth] || 0;
   return current - previous;
 };
 
@@ -81,23 +80,48 @@ const createLineSeries = (name: string, data: number[], showLabel: boolean) => {
   return series;
 };
 
+export const getAvailableMonthKeys = <T extends DatawhaleSourceItem>(
+  source: readonly T[],
+) => {
+  const monthSet = new Set<string>();
+
+  for (const item of source) {
+    for (const month of Object.keys(item.monthly_total_stars ?? {})) {
+      monthSet.add(month);
+    }
+  }
+
+  return [...monthSet].sort(
+    (left, right) => getMonthTimestamp(left) - getMonthTimestamp(right),
+  );
+};
+
 export const createDatawhaleSeriesConfig = <T extends DatawhaleSourceItem>({
   source,
   mode,
   showLabel = false,
+  fromMonth,
+  toMonth,
 }: CreateDatawhaleSeriesConfigOptions<T>) => {
-  const monthKeys = Object.keys(source[0]?.monthly_total_stars ?? {}).filter(
-    shouldReadMonth,
+  const availableMonthKeys = getAvailableMonthKeys(source);
+  const selectedFromMonth = fromMonth ?? availableMonthKeys[0];
+  const selectedToMonth = toMonth ?? availableMonthKeys[availableMonthKeys.length - 1];
+  const monthKeys = availableMonthKeys.filter((month) =>
+    shouldReadMonth(month, selectedFromMonth, selectedToMonth),
   );
   const months = monthKeys.map(mapMonthToNextMonthFirstDay);
 
   const generateSeriesList = () =>
     source.map((item) => {
-      const data = monthKeys.map((month) => getMonthValue(item, month, mode));
+      const data = monthKeys.map((month) =>
+        getMonthValue(item, month, mode, selectedFromMonth),
+      );
       return createLineSeries(item.name, data, showLabel);
     });
 
   return {
+    availableMonthKeys,
+    monthKeys,
     months,
     generateSeriesList,
   };

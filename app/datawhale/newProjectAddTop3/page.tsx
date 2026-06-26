@@ -1,63 +1,15 @@
-"use client";
-
-import { useEffect } from "react";
-import styles from "./page.module.css";
-import * as echarts from "echarts";
-import datasource from "../../assets/datasource.json"
-import { createDatawhaleSeriesConfig } from "../chartUtils";
+import datasource from "@/data/organization_datasource.json"
+import { DatawhaleChart } from "../DatawhaleChart";
 
 const source = datasource.newProjectAddTop3Info
-const { months, generateSeriesList } = createDatawhaleSeriesConfig({
-  source,
-  mode: "yearlyGrowth",
-  showLabel: true,
-});
 
 export default function Home() {
-  useEffect(() => {
-    const myChart = echarts.init(document.getElementById("echart"));
-    const option = {
-      // animationDuration: 10000,
-      title: {
-        text: 'Datawhale新创建的项目本年度Star增长数Top3'
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      legend: {
-        data: source.map((item) => item.name),
-        orient: 'horizontal',
-        top: 40
-      },
-      grid: {
-        left: 30,
-        right: 200,
-        bottom: 30,
-        top: 150,
-        containLabel: true
-      },
-      toolbox: {
-        feature: {
-          saveAsImage: {}
-        }
-      },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: months
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: generateSeriesList()
-    };
-
-    myChart.setOption(option);
-  }, []);
-
   return (
-    <div className={styles.page}>
-      <div id="echart" className={styles.chart}></div>
-    </div>
+    <DatawhaleChart
+      source={source}
+      mode="yearlyGrowth"
+      title="Datawhale新创建的项目本年度Star增长数Top3"
+      showLabel
+    />
   );
 }

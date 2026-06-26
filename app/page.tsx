@@ -13,7 +13,7 @@ export default function Home() {
       </Link>
       <Link href="/datawhale/projectAdd">
         <div className={styles.link}>
-          <h2>Datawhale超过1000Star项目的本年度Star增长数</h2>
+          <h2>Datawhale项目本年度Star增长数动态柱状图</h2>
         </div>
       </Link>
       <Link href="/datawhale/projectAddTop5">

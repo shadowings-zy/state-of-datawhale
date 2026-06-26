@@ -8,12 +8,12 @@ module.exports = {
     value: "datawhalechina",
   },
   currentKey: {
-    description: "本次生成的数据月份；组织快照会写入 data/allOrganization/<currentKey>。",
-    value: "2026-6",
+    description: "本次生成的数据快照日期，格式为 YYYY-MM-DD；组织快照会写入 data/allOrganization/<currentKey>。",
+    value: "2026-06-26",
   },
   previousKey: {
-    description: "用于计算增量的上一期月份；为空时会从 data/allOrganization 已有月份中自动推断。",
-    value: "2026-4",
+    description: "用于计算增量的上一期快照日期，格式为 YYYY-MM-DD；为空时会从 data/allOrganization 已有快照中自动推断。",
+    value: "2026-04-01",
   },
   runOnlyOnFirstDay: {
     description: "是否仅允许每月 1 日执行；补历史月份时设为 false。",
@@ -55,7 +55,7 @@ module.exports = {
     value: "data/repo",
   },
   allOrganizationDataDir: {
-    description: "按月份保存组织榜单快照和 repoList 快照的目录；相对路径基于项目根目录。",
+    description: "按快照日期保存组织榜单快照和 repoList 快照的目录；相对路径基于项目根目录。",
     value: "data/allOrganization",
   },
   allOrganizationFileName: {

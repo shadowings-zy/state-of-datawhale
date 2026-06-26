@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import datasource from "@/data/organization_datasource.json";
-import topOrganizations from "@/data/allOrganization/2026-4/top_10_knowledge_sharing_organization.json";
+import topOrganizations from "@/data/allOrganization/2026-04-01/top_10_knowledge_sharing_organization.json";
 import styles from "./page.module.css";
 
 type MonthKey = "2026-1" | "2026-2" | "2026-3";

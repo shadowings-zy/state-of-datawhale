@@ -1,8 +1,13 @@
 import datasource from "@/data/organization_datasource.json"
-import { DatawhaleChart } from "../DatawhaleChart";
+import { DatawhaleProjectOverview } from "../DatawhaleProjectOverview";
 
 const source = datasource.projectInfo
 
 export default function Home() {
-  return <DatawhaleChart source={source} mode="total" title="Datawhale项目Star数" />;
+  return (
+    <DatawhaleProjectOverview
+      source={source}
+      title="Datawhale超过1000Star项目的Star数"
+    />
+  );
 }

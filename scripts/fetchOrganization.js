@@ -17,46 +17,46 @@ const {
 } = require("./utils.js");
 const { CONFIG } = require("./fetchOrganizationConfig.js");
 
-function parseMonthKeyParts(key) {
-  const match = String(key).match(/^(\d{4})-(\d{1,2})$/);
+function parseSnapshotKeyParts(key) {
+  const match = String(key).match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (!match) {
-    throw new Error(`月份 key 格式不正确: ${key}`);
+    throw new Error(`快照日期 key 格式不正确，应为 YYYY-MM-DD: ${key}`);
   }
 
   const year = Number(match[1]);
   const month = Number(match[2]);
-  if (month < 1 || month > 12) {
-    throw new Error(`月份 key 月份范围不正确: ${key}`);
+  const day = Number(match[3]);
+  const date = new Date(year, month - 1, day);
+
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  ) {
+    throw new Error(`快照日期 key 日期不合法: ${key}`);
   }
 
-  return { year, month };
+  return { date, day, month, year };
 }
 
-function formatMonthKey(key, { padMonth = false } = {}) {
-  const { year, month } = parseMonthKeyParts(key);
-  return `${year}-${padMonth ? String(month).padStart(2, "0") : month}`;
+function formatSnapshotKey(date) {
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
 }
 
-function getMonthAliases(key) {
-  return [formatMonthKey(key, { padMonth: true }), formatMonthKey(key)].filter(
-    (item, index, list) => list.indexOf(item) === index,
-  );
-}
-
-function getOrganizationMonthDir(key) {
+function getOrganizationSnapshotDir(key) {
   return path.join(CONFIG.ALL_ORGANIZATION_DATA_DIR, key);
 }
 
-function resolveExistingMonthKey(key) {
-  for (const alias of getMonthAliases(key)) {
-    if (fs.existsSync(getOrganizationMonthDir(alias))) {
-      return alias;
-    }
-  }
+function resolveExistingSnapshotKey(key) {
+  parseSnapshotKeyParts(key);
   return key;
 }
 
-function listExistingMonthKeys() {
+function listExistingSnapshotKeys() {
   if (!fs.existsSync(CONFIG.ALL_ORGANIZATION_DATA_DIR)) {
     return [];
   }
@@ -66,42 +66,37 @@ function listExistingMonthKeys() {
     .filter((name) =>
       fs.statSync(path.join(CONFIG.ALL_ORGANIZATION_DATA_DIR, name)).isDirectory(),
     )
-    .filter((name) => /^\d{4}-\d{1,2}$/.test(name))
+    .filter((name) => /^\d{4}-\d{2}-\d{2}$/.test(name))
     .sort((left, right) => {
-      const leftParts = parseMonthKeyParts(left);
-      const rightParts = parseMonthKeyParts(right);
-      return (
-        leftParts.year * 12 +
-        leftParts.month -
-        (rightParts.year * 12 + rightParts.month)
-      );
+      const leftParts = parseSnapshotKeyParts(left);
+      const rightParts = parseSnapshotKeyParts(right);
+      return leftParts.date.getTime() - rightParts.date.getTime();
     });
 }
 
-function getPreviousMonthKey(currentKey) {
-  const currentParts = parseMonthKeyParts(currentKey);
-  const currentValue = currentParts.year * 12 + currentParts.month;
-  const monthKeys = listExistingMonthKeys().filter((monthKey) => {
-    const parts = parseMonthKeyParts(monthKey);
-    return parts.year * 12 + parts.month < currentValue;
+function getPreviousSnapshotKey(currentKey) {
+  const currentParts = parseSnapshotKeyParts(currentKey);
+  const snapshotKeys = listExistingSnapshotKeys().filter((snapshotKey) => {
+    const parts = parseSnapshotKeyParts(snapshotKey);
+    return parts.date.getTime() < currentParts.date.getTime();
   });
 
-  return monthKeys[monthKeys.length - 1] || null;
+  return snapshotKeys[snapshotKeys.length - 1] || null;
 }
 
 async function fetchOrganizationData(key, previousKey = null) {
-  const currentMonthDir = getOrganizationMonthDir(key);
-  const originRepoListMonthKey = previousKey
-    ? resolveExistingMonthKey(previousKey)
-    : getPreviousMonthKey(key);
-  const repoDataListFilePath = originRepoListMonthKey
+  const currentSnapshotDir = getOrganizationSnapshotDir(key);
+  const originRepoListSnapshotKey = previousKey
+    ? resolveExistingSnapshotKey(previousKey)
+    : getPreviousSnapshotKey(key);
+  const repoDataListFilePath = originRepoListSnapshotKey
     ? path.join(
-        getOrganizationMonthDir(originRepoListMonthKey),
+        getOrganizationSnapshotDir(originRepoListSnapshotKey),
         CONFIG.REPO_DATA_LIST_FILE_NAME,
       )
     : null;
   const repoDataListFilePathWithKey = path.join(
-    currentMonthDir,
+    currentSnapshotDir,
     CONFIG.REPO_DATA_LIST_FILE_NAME,
   );
   const originRepoDataList = repoDataListFilePath
@@ -123,11 +118,11 @@ async function fetchOrganizationData(key, previousKey = null) {
     CONFIG.TOP_10_KNOWLEDGE_SHARING_ORGANIZATION,
   );
   const allOrganizationPathWithKey = path.join(
-    currentMonthDir,
+    currentSnapshotDir,
     CONFIG.ALL_ORGANIZATION_FILE_NAME,
   );
   const top10KnowledgeSharingOrganizationPathWithKey = path.join(
-    currentMonthDir,
+    currentSnapshotDir,
     CONFIG.TOP_10_KNOWLEDGE_SHARING_ORGANIZATION_FILE_NAME,
   );
 
@@ -159,22 +154,22 @@ async function fetchOrganizationData(key, previousKey = null) {
 }
 
 function analyzeOrganizationData(previousKey, currentKey) {
-  const resolvedPreviousKey = resolveExistingMonthKey(previousKey);
-  const resolvedCurrentKey = resolveExistingMonthKey(currentKey);
+  const resolvedPreviousKey = resolveExistingSnapshotKey(previousKey);
+  const resolvedCurrentKey = resolveExistingSnapshotKey(currentKey);
   const previousTop10OrganizationPath = path.join(
-    getOrganizationMonthDir(resolvedPreviousKey),
+    getOrganizationSnapshotDir(resolvedPreviousKey),
     CONFIG.TOP_10_KNOWLEDGE_SHARING_ORGANIZATION_FILE_NAME,
   );
   const currentTop10OrganizationPath = path.join(
-    getOrganizationMonthDir(resolvedCurrentKey),
+    getOrganizationSnapshotDir(resolvedCurrentKey),
     CONFIG.TOP_10_KNOWLEDGE_SHARING_ORGANIZATION_FILE_NAME,
   );
   const previousRepoListPath = path.join(
-    getOrganizationMonthDir(resolvedPreviousKey),
+    getOrganizationSnapshotDir(resolvedPreviousKey),
     CONFIG.REPO_DATA_LIST_FILE_NAME,
   );
   const currentRepoListPath = path.join(
-    getOrganizationMonthDir(resolvedCurrentKey),
+    getOrganizationSnapshotDir(resolvedCurrentKey),
     CONFIG.REPO_DATA_LIST_FILE_NAME,
   );
 
@@ -219,11 +214,11 @@ async function main() {
   }
 
   const currentKey = CONFIG.CURRENT_KEY
-    ? formatMonthKey(CONFIG.CURRENT_KEY, { padMonth: CONFIG.CURRENT_KEY.includes("-0") })
-    : `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    ? resolveExistingSnapshotKey(CONFIG.CURRENT_KEY)
+    : formatSnapshotKey(now);
   const previousKey = CONFIG.PREVIOUS_KEY
-    ? resolveExistingMonthKey(CONFIG.PREVIOUS_KEY)
-    : getPreviousMonthKey(currentKey);
+    ? resolveExistingSnapshotKey(CONFIG.PREVIOUS_KEY)
+    : getPreviousSnapshotKey(currentKey);
 
   if (CONFIG.FETCH_ENABLED) {
     await fetchOrganizationData(currentKey, previousKey);
@@ -248,7 +243,7 @@ module.exports = {
   CONFIG,
   analyzeOrganizationData,
   fetchOrganizationData,
-  formatMonthKey,
-  getPreviousMonthKey,
-  resolveExistingMonthKey,
+  formatSnapshotKey,
+  getPreviousSnapshotKey,
+  resolveExistingSnapshotKey,
 };

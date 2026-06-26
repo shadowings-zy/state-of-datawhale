@@ -1,5 +1,6 @@
 const axios = require("axios");
 const dayjs = require("dayjs");
+const { CONFIG } = require("./fetchOrganizationConfig.js");
 
 function parseMonthKey(monthKey) {
   const [year, month] = monthKey.split("-").map(Number);
@@ -7,9 +8,9 @@ function parseMonthKey(monthKey) {
 }
 
 async function getGithubRepoByOrganizationName(
-  organizationName,
-  token = "",
-  ignoreRepoNameList = [],
+  organizationName = CONFIG.DATAWHALE_ORGANIZATION_NAME,
+  token = CONFIG.GITHUB_TOKEN,
+  ignoreRepoNameList = CONFIG.IGNORED_REPO_NAMES,
 ) {
   const output = [];
   let needNextPage = true;
@@ -52,10 +53,9 @@ async function getGithubRepoByOrganizationName(
       needNextPage = data.length === pageSize;
       page += 1;
     } catch (error) {
-      console.log(
-        `fetch organization error: ${organizationName}, ${error.message}`,
+      throw new Error(
+        `fetch organization error: ${organizationName}, page: ${page}, ${formatAxiosError(error)}`,
       );
-      needNextPage = false;
     }
   }
 
@@ -63,12 +63,13 @@ async function getGithubRepoByOrganizationName(
 }
 
 async function getGithubStarCount(
-  organizationName,
+  organizationName = CONFIG.DATAWHALE_ORGANIZATION_NAME,
   repo,
-  token = "",
+  token = CONFIG.GITHUB_TOKEN,
   monthlyStars = {},
   monthlyTotalStars = {},
   starCount = 0,
+  currentRepoStarCount = starCount,
 ) {
   const output = {
     repo_name: repo,
@@ -97,6 +98,17 @@ async function getGithubStarCount(
   const pageSize = 100;
   let page = Math.floor(output.star_count / pageSize) + 1;
   let totalStars = output.star_count;
+  const currentRepoPageCount = Math.ceil(currentRepoStarCount / pageSize);
+
+  if (page > 400 || currentRepoPageCount > 400) {
+    return fetchGithubStarCountByGraphql(
+      organizationName,
+      repo,
+      token,
+      output,
+      startUpdateDate,
+    );
+  }
 
   while (needNextPage) {
     try {
@@ -137,9 +149,101 @@ async function getGithubStarCount(
       needNextPage = data.length === pageSize;
       page += 1;
     } catch (error) {
-      console.log(`fetch repo error: ${repo}, ${error.message}`);
-      needNextPage = false;
+      throw new Error(
+        `fetch repo error: ${repo}, page: ${page}, ${formatAxiosError(error)}`,
+      );
     }
+  }
+
+  output.star_count = totalStars;
+  return output;
+}
+
+async function fetchGithubStarCountByGraphql(
+  organizationName,
+  repo,
+  token,
+  output,
+  startUpdateDate,
+) {
+  if (!token) {
+    throw new Error(`fetch repo error: ${repo}, GraphQL requires GitHub token`);
+  }
+
+  let cursor = null;
+  let totalStars = output.star_count;
+  let shouldContinue = true;
+  const fetchedDates = [];
+
+  while (shouldContinue) {
+    try {
+      console.log(`fetch repo by graphql: ${repo}, cursor: ${cursor || "HEAD"}`);
+      const response = await axios.post(
+        "https://api.github.com/graphql",
+        {
+          query: `
+            query RepoStargazers($owner: String!, $name: String!, $cursor: String) {
+              repository(owner: $owner, name: $name) {
+                stargazers(
+                  first: 100
+                  after: $cursor
+                  orderBy: { field: STARRED_AT, direction: DESC }
+                ) {
+                  pageInfo {
+                    hasNextPage
+                    endCursor
+                  }
+                  edges {
+                    starredAt
+                  }
+                }
+              }
+            }
+          `,
+          variables: {
+            owner: organizationName,
+            name: repo,
+            cursor,
+          },
+        },
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.data.errors) {
+        throw new Error(JSON.stringify(response.data.errors));
+      }
+
+      const stargazers = response.data.data.repository.stargazers;
+      const edges = stargazers.edges || [];
+      for (const edge of edges) {
+        const date = dayjs(edge.starredAt);
+        if (date.isBefore(startUpdateDate)) {
+          shouldContinue = false;
+          continue;
+        }
+        fetchedDates.push(date);
+      }
+
+      cursor = stargazers.pageInfo.endCursor;
+      shouldContinue = shouldContinue && stargazers.pageInfo.hasNextPage;
+    } catch (error) {
+      throw new Error(
+        `fetch repo error: ${repo}, graphql cursor: ${cursor || "HEAD"}, ${formatAxiosError(error)}`,
+      );
+    }
+  }
+
+  fetchedDates.sort((left, right) => left.valueOf() - right.valueOf());
+  for (const date of fetchedDates) {
+    totalStars += 1;
+    const monthKey = `${date.year()}-${date.month() + 1}`;
+    output.monthly_stars[monthKey] =
+      (output.monthly_stars[monthKey] || 0) + 1;
+    output.monthly_total_stars[monthKey] = totalStars;
   }
 
   output.star_count = totalStars;
@@ -192,18 +296,21 @@ function fillMissingMonths(input, key) {
 }
 
 async function fetchOrganizationRepoDetail(
-  organizationName,
-  token,
-  ignoreRepoNameList,
-  originRepoDetailList,
-  monthKey,
+  originRepoDetailList = [],
+  monthKey = CONFIG.CURRENT_KEY,
 ) {
+  const organizationName = CONFIG.DATAWHALE_ORGANIZATION_NAME;
+  const token = CONFIG.GITHUB_TOKEN;
+  const ignoreRepoNameList = CONFIG.IGNORED_REPO_NAMES;
   const repoList = await getGithubRepoByOrganizationName(
     organizationName,
     token,
     ignoreRepoNameList,
   );
   console.log(`${organizationName} repo_list:`, repoList);
+  if (repoList.length === 0) {
+    throw new Error(`fetch organization repo list is empty: ${organizationName}`);
+  }
 
   const repoDetailList = [];
   for (const repo of repoList) {
@@ -222,6 +329,7 @@ async function fetchOrganizationRepoDetail(
       originDetail ? originDetail.monthly_stars : {},
       originDetail ? originDetail.monthly_total_stars : {},
       originDetail ? originDetail.star_count : 0,
+      repo.star_count,
     );
     const filledOutput = fillMissingMonths(output, monthKey);
     repoDetailList.push(filledOutput);
@@ -236,9 +344,24 @@ async function fetchOrganizationRepoDetail(
   };
 }
 
+function formatAxiosError(error) {
+  if (!error.response) {
+    return error.message;
+  }
+
+  const payload =
+    typeof error.response.data === "string"
+      ? error.response.data
+      : JSON.stringify(error.response.data);
+
+  return `status: ${error.response.status}, body: ${payload}`;
+}
+
 module.exports = {
   fetchOrganizationRepoDetail,
+  fetchGithubStarCountByGraphql,
   fillMissingMonths,
+  formatAxiosError,
   getGithubRepoByOrganizationName,
   getGithubStarCount,
   parseMonthKey,

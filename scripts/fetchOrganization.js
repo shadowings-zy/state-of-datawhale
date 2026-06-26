@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs-extra");
 
 const { getTop10KnowledgeSharingOrganizationInfo } = require("./analyzeOrganization.js");
 const {
@@ -11,99 +12,101 @@ const { fetchOrganizationFromStarHistory } = require("./fetchOrganizationFromSta
 const { fetchOrganizationRepoDetail } = require("./fetchOrganizationRepoDetail.js");
 const {
   ensureDirAndWriteFile,
-  ensureDirAndWriteFiles,
   readJson,
   toPrettyJson,
 } = require("./utils.js");
+const { CONFIG } = require("./fetchOrganizationConfig.js");
 
-loadDotEnv();
-
-const PROJECT_ROOT = path.resolve(__dirname, "../..");
-const DATA_ROOT = path.join(PROJECT_ROOT, "docs", "public", "data", "datawhalechina");
-
-const CONFIG = {
-  GITHUB_TOKEN: process.env.GITHUB_TOKEN || "",
-  DATAWHALE_ORGANIZATION_NAME: "datawhalechina",
-  TOP_10_KNOWLEDGE_SHARING_ORGANIZATION: [
-    "freeCodeCamp",
-    "TheAlgorithms",
-    "EbookFoundation",
-    "ossu",
-    "doocs",
-    "h5bp",
-    "datawhalechina",
-    "dair-ai",
-    "jobbole",
-    "papers-we-love",
-  ],
-  DATA_DIR: DATA_ROOT,
-  REPO_DATA_DIR: path.join(DATA_ROOT, "repo"),
-  ORGANIZATION_DATA_DIR: path.join(DATA_ROOT, "organization"),
-  ALL_ORGANIZATION_FILE_NAME: "all_organization.json",
-  TOP_10_KNOWLEDGE_SHARING_ORGANIZATION_FILE_NAME:
-    "top_10_knowledge_sharing_organization.json",
-  REPO_DATA_LIST_FILE_NAME: "repo_list.json",
-  ANALYZED_DATASOURCE_FILE_NAME: path.join(
-    DATA_ROOT,
-    "organization_datasource.json",
-  ),
-  FETCH_TIME_KEY_FILE_NAME: path.join(DATA_ROOT, "fetch_time_key.json"),
-};
-
-function loadDotEnv() {
-  const envPath = path.join(process.cwd(), ".env");
-  const envData = readJsonLikeEnv(envPath);
-
-  for (const [key, value] of Object.entries(envData)) {
-    if (process.env[key] === undefined) {
-      process.env[key] = value;
-    }
+function parseMonthKeyParts(key) {
+  const match = String(key).match(/^(\d{4})-(\d{1,2})$/);
+  if (!match) {
+    throw new Error(`月份 key 格式不正确: ${key}`);
   }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  if (month < 1 || month > 12) {
+    throw new Error(`月份 key 月份范围不正确: ${key}`);
+  }
+
+  return { year, month };
 }
 
-function readJsonLikeEnv(filePath) {
-  const fs = require("fs");
-  if (!fs.existsSync(filePath)) {
-    return {};
-  }
-
-  const output = {};
-  const lines = fs.readFileSync(filePath, "utf8").split(/\r?\n/);
-  for (const line of lines) {
-    const trimmedLine = line.trim();
-    if (!trimmedLine || trimmedLine.startsWith("#")) {
-      continue;
-    }
-
-    const separatorIndex = trimmedLine.indexOf("=");
-    if (separatorIndex === -1) {
-      continue;
-    }
-
-    const key = trimmedLine.slice(0, separatorIndex).trim();
-    let value = trimmedLine.slice(separatorIndex + 1).trim();
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    output[key] = value;
-  }
-  return output;
+function formatMonthKey(key, { padMonth = false } = {}) {
+  const { year, month } = parseMonthKeyParts(key);
+  return `${year}-${padMonth ? String(month).padStart(2, "0") : month}`;
 }
 
-async function fetchOrganizationData(key) {
-  const repoDataListFilePath = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    CONFIG.REPO_DATA_LIST_FILE_NAME,
+function getMonthAliases(key) {
+  return [formatMonthKey(key, { padMonth: true }), formatMonthKey(key)].filter(
+    (item, index, list) => list.indexOf(item) === index,
   );
+}
+
+function getOrganizationMonthDir(key) {
+  return path.join(CONFIG.ALL_ORGANIZATION_DATA_DIR, key);
+}
+
+function resolveExistingMonthKey(key) {
+  for (const alias of getMonthAliases(key)) {
+    if (fs.existsSync(getOrganizationMonthDir(alias))) {
+      return alias;
+    }
+  }
+  return key;
+}
+
+function listExistingMonthKeys() {
+  if (!fs.existsSync(CONFIG.ALL_ORGANIZATION_DATA_DIR)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(CONFIG.ALL_ORGANIZATION_DATA_DIR)
+    .filter((name) =>
+      fs.statSync(path.join(CONFIG.ALL_ORGANIZATION_DATA_DIR, name)).isDirectory(),
+    )
+    .filter((name) => /^\d{4}-\d{1,2}$/.test(name))
+    .sort((left, right) => {
+      const leftParts = parseMonthKeyParts(left);
+      const rightParts = parseMonthKeyParts(right);
+      return (
+        leftParts.year * 12 +
+        leftParts.month -
+        (rightParts.year * 12 + rightParts.month)
+      );
+    });
+}
+
+function getPreviousMonthKey(currentKey) {
+  const currentParts = parseMonthKeyParts(currentKey);
+  const currentValue = currentParts.year * 12 + currentParts.month;
+  const monthKeys = listExistingMonthKeys().filter((monthKey) => {
+    const parts = parseMonthKeyParts(monthKey);
+    return parts.year * 12 + parts.month < currentValue;
+  });
+
+  return monthKeys[monthKeys.length - 1] || null;
+}
+
+async function fetchOrganizationData(key, previousKey = null) {
+  const currentMonthDir = getOrganizationMonthDir(key);
+  const originRepoListMonthKey = previousKey
+    ? resolveExistingMonthKey(previousKey)
+    : getPreviousMonthKey(key);
+  const repoDataListFilePath = originRepoListMonthKey
+    ? path.join(
+        getOrganizationMonthDir(originRepoListMonthKey),
+        CONFIG.REPO_DATA_LIST_FILE_NAME,
+      )
+    : null;
   const repoDataListFilePathWithKey = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    key,
+    currentMonthDir,
     CONFIG.REPO_DATA_LIST_FILE_NAME,
   );
-  const originRepoDataList = readJson(repoDataListFilePath, []);
+  const originRepoDataList = repoDataListFilePath
+    ? readJson(repoDataListFilePath, [])
+    : [];
   const originRepoDetailList = [];
 
   for (const repoDetail of originRepoDataList) {
@@ -116,49 +119,33 @@ async function fetchOrganizationData(key) {
   }
 
   const starHistoryRes = await fetchOrganizationFromStarHistory(
-    10,
+    CONFIG.STAR_HISTORY_PAGE_COUNT,
     CONFIG.TOP_10_KNOWLEDGE_SHARING_ORGANIZATION,
   );
-  const allOrganizationPath = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    CONFIG.ALL_ORGANIZATION_FILE_NAME,
-  );
   const allOrganizationPathWithKey = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    key,
+    currentMonthDir,
     CONFIG.ALL_ORGANIZATION_FILE_NAME,
-  );
-  const top10KnowledgeSharingOrganizationPath = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    CONFIG.TOP_10_KNOWLEDGE_SHARING_ORGANIZATION_FILE_NAME,
   );
   const top10KnowledgeSharingOrganizationPathWithKey = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    key,
+    currentMonthDir,
     CONFIG.TOP_10_KNOWLEDGE_SHARING_ORGANIZATION_FILE_NAME,
   );
 
-  ensureDirAndWriteFiles(
-    [allOrganizationPath, allOrganizationPathWithKey],
+  ensureDirAndWriteFile(
+    allOrganizationPathWithKey,
     toPrettyJson(starHistoryRes.organization_list),
   );
-  ensureDirAndWriteFiles(
-    [
-      top10KnowledgeSharingOrganizationPath,
-      top10KnowledgeSharingOrganizationPathWithKey,
-    ],
+  ensureDirAndWriteFile(
+    top10KnowledgeSharingOrganizationPathWithKey,
     toPrettyJson(starHistoryRes.top_10_knowledge_sharing_organization),
   );
 
   const repoDetailRes = await fetchOrganizationRepoDetail(
-    CONFIG.DATAWHALE_ORGANIZATION_NAME,
-    CONFIG.GITHUB_TOKEN,
-    [".github"],
     originRepoDetailList,
     key,
   );
-  ensureDirAndWriteFiles(
-    [repoDataListFilePath, repoDataListFilePathWithKey],
+  ensureDirAndWriteFile(
+    repoDataListFilePathWithKey,
     toPrettyJson(repoDetailRes.repo_list),
   );
 
@@ -172,24 +159,22 @@ async function fetchOrganizationData(key) {
 }
 
 function analyzeOrganizationData(previousKey, currentKey) {
+  const resolvedPreviousKey = resolveExistingMonthKey(previousKey);
+  const resolvedCurrentKey = resolveExistingMonthKey(currentKey);
   const previousTop10OrganizationPath = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    previousKey,
+    getOrganizationMonthDir(resolvedPreviousKey),
     CONFIG.TOP_10_KNOWLEDGE_SHARING_ORGANIZATION_FILE_NAME,
   );
   const currentTop10OrganizationPath = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    currentKey,
+    getOrganizationMonthDir(resolvedCurrentKey),
     CONFIG.TOP_10_KNOWLEDGE_SHARING_ORGANIZATION_FILE_NAME,
   );
   const previousRepoListPath = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    previousKey,
+    getOrganizationMonthDir(resolvedPreviousKey),
     CONFIG.REPO_DATA_LIST_FILE_NAME,
   );
   const currentRepoListPath = path.join(
-    CONFIG.ORGANIZATION_DATA_DIR,
-    currentKey,
+    getOrganizationMonthDir(resolvedCurrentKey),
     CONFIG.REPO_DATA_LIST_FILE_NAME,
   );
 
@@ -226,64 +211,28 @@ function analyzeOrganizationData(previousKey, currentKey) {
   );
 }
 
-function parseArgs(argv) {
-  const options = {
-    force: false,
-    fetchOnly: false,
-    analyzeOnly: false,
-    currentKey: null,
-    previousKey: null,
-  };
-
-  for (let index = 0; index < argv.length; index += 1) {
-    const arg = argv[index];
-    if (arg === "--force") {
-      options.force = true;
-    } else if (arg === "--fetch-only") {
-      options.fetchOnly = true;
-    } else if (arg === "--analyze-only") {
-      options.analyzeOnly = true;
-    } else if (arg === "--current-key") {
-      options.currentKey = argv[index + 1];
-      index += 1;
-    } else if (arg === "--previous-key") {
-      options.previousKey = argv[index + 1];
-      index += 1;
-    }
-  }
-
-  return options;
-}
-
 async function main() {
-  const options = parseArgs(process.argv.slice(2));
   const now = new Date();
 
-  if (now.getDate() !== 1 && !options.force) {
+  if (now.getDate() !== 1 && CONFIG.RUN_ONLY_ON_FIRST_DAY) {
     process.exit(0);
   }
 
-  const currentKey =
-    options.currentKey || `${now.getFullYear()}-${now.getMonth() + 1}`;
-  const keyList = readJson(CONFIG.FETCH_TIME_KEY_FILE_NAME, []);
-  let previousKey =
-    options.previousKey ||
-    (keyList.includes(currentKey) ? keyList[keyList.length - 2] : keyList[keyList.length - 3]);
+  const currentKey = CONFIG.CURRENT_KEY
+    ? formatMonthKey(CONFIG.CURRENT_KEY, { padMonth: CONFIG.CURRENT_KEY.includes("-0") })
+    : `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  const previousKey = CONFIG.PREVIOUS_KEY
+    ? resolveExistingMonthKey(CONFIG.PREVIOUS_KEY)
+    : getPreviousMonthKey(currentKey);
 
-  if (!previousKey) {
-    previousKey = keyList[keyList.length - 1];
+  if (CONFIG.FETCH_ENABLED) {
+    await fetchOrganizationData(currentKey, previousKey);
   }
 
-  if (!options.analyzeOnly && !keyList.includes(currentKey)) {
-    keyList.push(currentKey);
-    ensureDirAndWriteFile(CONFIG.FETCH_TIME_KEY_FILE_NAME, toPrettyJson(keyList));
-  }
-
-  if (!options.analyzeOnly) {
-    await fetchOrganizationData(currentKey);
-  }
-
-  if (!options.fetchOnly) {
+  if (CONFIG.ANALYZE_ENABLED) {
+    if (!previousKey) {
+      throw new Error("缺少 previousKey，无法分析组织和仓库增量数据");
+    }
     analyzeOrganizationData(previousKey, currentKey);
   }
 }
@@ -299,5 +248,7 @@ module.exports = {
   CONFIG,
   analyzeOrganizationData,
   fetchOrganizationData,
-  parseArgs,
+  formatMonthKey,
+  getPreviousMonthKey,
+  resolveExistingMonthKey,
 };

@@ -2,9 +2,9 @@ const path = require("path");
 const { readJson, toPrettyJson } = require("./utils.js");
 
 const defaultPreviousPath =
-  "data/allOrganization/2026-04-01/top_10_knowledge_sharing_organization.json";
-const defaultCurrentPath =
   "data/allOrganization/2026-06-26/top_10_knowledge_sharing_organization.json";
+const defaultCurrentPath =
+  "data/allOrganization/2026-09-11/top_10_knowledge_sharing_organization.json";
 
 function resolveProjectPath(filePath) {
   return path.resolve(__dirname, "..", filePath);

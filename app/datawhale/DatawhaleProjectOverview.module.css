@@ -111,8 +111,8 @@
 .heatmapChart {
   width: 100%;
   min-width: 1080px;
-  height: min(780px, 120vh);
-  min-height: 620px;
+  height: min(1200px, 190vh);
+  min-height: 1100px;
 }
 
 @media (max-width: 760px) {

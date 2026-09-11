@@ -1,10 +1,9 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import datasource from "@/data/organization_datasource.json";
-import topOrganizations from "@/data/allOrganization/2026-06-26/top_10_knowledge_sharing_organization.json";
 import styles from "./page.module.css";
 
-type MonthKey = "2026-4" | "2026-5" | "2026-6";
-
+type MonthKey = "2026-7" | "2026-8" | "2026-9";
 type MonthlySeries = Record<string, number>;
 
 type ProjectRecord = {
@@ -18,542 +17,334 @@ type OrganizationRecord = {
   name: string;
   star_count: number;
   rank: number;
+  starAdd: number;
+  rankAdd: number;
 };
 
-type ProjectCard = {
-  name: string;
-  displayName: string;
+type ProjectView = ProjectRecord & {
   quarterAdd: number;
-  totalStars: number;
   monthlyAdds: number[];
-  monthlyTotals: number[];
   insight: string;
 };
 
-type PeerCard = {
-  name: string;
-  label: string;
-  growth: number;
-  rank: number;
-  totalStars: number;
-  note: string;
-};
-
 export const metadata: Metadata = {
-  title: "Datawhale 季度观察 | 2026 年第二季度增长海报",
-  description: "基于飞书文档《2026年4-6月datawhale项目及外部同类组织数据分析》生成的 Datawhale 中文增长展示页。",
+  title: "Datawhale 季度观察 | 2026 年第三季度",
+  description:
+    "Datawhale 2026 年 7—9 月项目增长与外部同类组织观察，数据截至 2026 年 9 月 11 日。",
 };
 
-const monthKeys: MonthKey[] = ["2026-4", "2026-5", "2026-6"];
-
+const months: MonthKey[] = ["2026-7", "2026-8", "2026-9"];
 const monthLabels: Record<MonthKey, string> = {
-  "2026-4": "4 月",
-  "2026-5": "5 月",
-  "2026-6": "6 月",
-};
-
-const projectDisplayNames: Record<string, string> = {
-  "hello-agents": "hello-agents",
-  "happy-llm": "happy-llm",
-  "easy-vibe": "easy-vibe",
-  "all-in-rag": "all-in-rag",
-  "vibe-vibe": "vibe-vibe",
-  "hello-claw": "hello-claw",
-  "agent-skills-with-anthropic": "agent-skills-with-anthropic",
-  "base-llm": "base-llm",
-  "self-llm": "self-llm",
-  "Agent-Learning-Hub": "Agent-Learning-Hub",
-  "deepagents-in-action": "deepagents-in-action",
-  "hello-generic-agent": "hello-generic-agent",
+  "2026-7": "7 月",
+  "2026-8": "8 月",
+  "2026-9": "9 月*",
 };
 
 const topProjectInsights: Record<string, string> = {
   "hello-agents":
-    "二季度新增 29,809 颗 Star，5 月单月新增 13,098，是本期最强爆发点，也是组织增长最核心的发动机。",
-  "happy-llm":
-    "高基数下继续稳定增长，4-6 月新增 3,272，6 月底总 Star 数达到 31,575，是组织 Star 结构里的重要基本盘。",
-  "easy-vibe":
-    "二季度新增 12,534，5 月单月新增 8,058，说明项目在一季度完成冷启动后又迎来明显扩散。",
-  "all-in-rag":
-    "二季度新增 3,447，4 月、5 月、6 月都维持较高水平，是 RAG 方向持续吸引学习者的稳定项目。",
+    "本季度新增 15,710 颗 Star，贡献千星项目约 47% 的新增量。月度热度虽较二季度峰值回落，仍是组织最重要的增长发动机。",
   "Agent-Learning-Hub":
-    "二季度新增 4,313，5 月和 6 月连续维持两千级增长，是本期唯一完全在二季度起量并进入增长 Top5 的项目。",
+    "本季度新增 3,165 颗 Star，延续二季度起量后的稳定传播，成为 hello-agents 之外最强的增量来源。",
+  "happy-llm":
+    "在高基数下继续稳定增长，7 月与 8 月增量接近。作为长期高热度的大模型学习项目，它仍是组织的重要基本盘。",
+  "all-in-rag":
+    "三个月保持连续增长，没有依赖单月爆发。项目持续吸引 RAG 方向学习者，是项目矩阵中的稳定增长项。",
+  "easy-vibe":
+    "热度较二季度高峰明显回落，但仍保持持续增长。项目完成大规模扩散后，正在进入更平稳的长尾阶段。",
 };
 
 const breakoutInsights: Record<string, string> = {
-  "Agent-Learning-Hub":
-    "它不是传统教程，而是一份可以照着执行的 AI Agent 学习 todo list，整理社区分享、论文、官方博客和工程经验，因此很快获得关注。",
-  "deepagents-in-action":
-    "基于 LangChain/LangGraph 生态构建生产级 AI Agent，5 月新增 118，6 月直接提升到 801，曲线已经明显变陡。",
-  "hello-generic-agent":
-    "Generic Agent 入门教程，围绕上下文信息密度最大化展开，二季度完成从 0 到数百 Star 的冷启动。",
-};
-
-const peerGrowthByName: Record<
-  string,
-  { growth: number; note: string; label: string }
-> = {
-  datawhalechina: {
-    growth: 68509,
-    note: "全球排名从第 29 位升至第 22 位，本期同榜组织中增量最强。",
-    label: "Datawhale",
-  },
-  freeCodeCamp: {
-    growth: 12101,
-    note: "同榜增量第二，但 Datawhale 的本期增量约为它的 5.7 倍。",
-    label: "freeCodeCamp",
-  },
-  EbookFoundation: {
-    growth: 6114,
-    note: "排名小幅前进，总量依旧领先，但季度速度明显低于 Datawhale。",
-    label: "EbookFoundation",
-  },
-  TheAlgorithms: {
-    growth: 5584,
-    note: "知识分享组织里的高基数代表，本期稳定增长但没有明显加速。",
-    label: "TheAlgorithms",
-  },
+  "zero-to-sglang":
+    "Datawhale 与 RadixArk 联合推出的大模型推理实战教程，从零实现 mini-sglang，再深入真实 SGLang 源码。9 月截至 11 日已新增 674 颗 Star。",
+  "deep-learning-notes":
+    "从 PyTorch 基础延伸到 Transformer、生成模型、多模态及工程实践的系统化学习笔记，本季度保持稳步积累。",
+  "omni-info-radar":
+    "面向 AI 与技术从业者的个性化信息雷达，覆盖聚合、筛选、摘要、报告与推送，8 月完成一轮明显冷启动。",
 };
 
 function sumQuarter(series: MonthlySeries) {
-  return monthKeys.reduce((sum, month) => sum + (series[month] ?? 0), 0);
+  return months.reduce((sum, month) => sum + (series[month] ?? 0), 0);
 }
 
 function formatNumber(value: number) {
   return new Intl.NumberFormat("zh-CN").format(value);
 }
 
-function getProjectDisplayName(name: string) {
-  return projectDisplayNames[name] ?? name;
-}
+const projectInfo = datasource.projectInfo as ProjectRecord[];
 
-function getProjectInsight(name: string, insights: Record<string, string>) {
-  return insights[name] ?? "该项目在本季度保持增长，是组织扩张的重要组成部分。";
-}
-
-const topProjects: ProjectCard[] = (
+const topProjects: ProjectView[] = (
   datasource.projectAddTop5Info as ProjectRecord[]
-).map((project) => ({
-  name: project.name,
-  displayName: getProjectDisplayName(project.name),
-  quarterAdd: sumQuarter(project.monthly_stars),
-  totalStars: project.monthly_total_stars["2026-6"] ?? project.star_count,
-  monthlyAdds: monthKeys.map((month) => project.monthly_stars[month] ?? 0),
-  monthlyTotals: monthKeys.map(
-    (month) => project.monthly_total_stars[month] ?? 0,
-  ),
-  insight: getProjectInsight(project.name, topProjectInsights),
-}));
+)
+  .map((project) => ({
+    ...project,
+    quarterAdd: sumQuarter(project.monthly_stars),
+    monthlyAdds: months.map((month) => project.monthly_stars[month] ?? 0),
+    insight:
+      topProjectInsights[project.name] ??
+      "项目在本季度保持增长，是组织项目矩阵的重要组成部分。",
+  }))
+  .sort((left, right) => right.quarterAdd - left.quarterAdd);
 
-const breakoutProjects: ProjectCard[] = (
+const breakoutProjects: ProjectView[] = (
   datasource.newProjectAddTop3Info as ProjectRecord[]
-).map((project) => ({
-  name: project.name,
-  displayName: getProjectDisplayName(project.name),
-  quarterAdd: sumQuarter(project.monthly_stars),
-  totalStars: project.monthly_total_stars["2026-6"] ?? project.star_count,
-  monthlyAdds: monthKeys.map((month) => project.monthly_stars[month] ?? 0),
-  monthlyTotals: monthKeys.map(
-    (month) => project.monthly_total_stars[month] ?? 0,
+)
+  .map((project) => ({
+    ...project,
+    quarterAdd: sumQuarter(project.monthly_stars),
+    monthlyAdds: months.map((month) => project.monthly_stars[month] ?? 0),
+    insight:
+      breakoutInsights[project.name] ??
+      "项目已经完成冷启动，正在积累第一批稳定关注者。",
+  }))
+  .sort((left, right) => right.quarterAdd - left.quarterAdd);
+
+const thousandStarProjects = projectInfo.filter(
+  (project) => (project.monthly_total_stars["2026-9"] ?? project.star_count) >= 1000,
+);
+
+const monthlyPulse = months.map((month) => ({
+  month,
+  label: monthLabels[month],
+  value: thousandStarProjects.reduce(
+    (sum, project) => sum + (project.monthly_stars[month] ?? 0),
+    0,
   ),
-  insight: getProjectInsight(project.name, breakoutInsights),
 }));
 
-const quarterlyPulse = monthKeys.map((month) => {
-  const total = (datasource.projectInfo as ProjectRecord[])
-    .filter((project) => (project.monthly_total_stars["2026-6"] ?? 0) >= 1000)
-    .reduce((sum, project) => sum + (project.monthly_total_stars[month] ?? 0), 0);
-
-  return {
-    month,
-    label: monthLabels[month],
-    total,
-  };
-});
-
-const topFiveTotal = topProjects.reduce(
+const projectQuarterGrowth = monthlyPulse.reduce(
+  (sum, month) => sum + month.value,
+  0,
+);
+const topFiveGrowth = topProjects.reduce(
   (sum, project) => sum + project.quarterAdd,
   0,
 );
+const topFiveShare = Math.round((topFiveGrowth / projectQuarterGrowth) * 100);
 
-const signalMetrics = [
-  {
-    label: "全球排名",
-    value: "第 22 位",
-    note: "从 2026 年 4 月 1 日的第 29 位上升到 2026 年 6 月 26 日的第 22 位",
-  },
-  {
-    label: "季度增量",
-    value: "68,000+",
-    note: "Datawhale 组织总 Star 数在 2026 年 4-6 月的新增量",
-  },
-  {
-    label: "前五贡献",
-    value: "53,000+",
-    note: "增长 Top5 合计新增 53,000+，占千星项目总增量超过 80%",
-  },
-  {
-    label: "五月峰值",
-    value: "29,000+",
-    note: "当前千星项目在 5 月新增 Star 数冲到本季度最高",
-  },
-];
+const organizations =
+  datasource.top10KnowledgeSharingOrganizationInfo as OrganizationRecord[];
+const datawhale = organizations.find(
+  (organization) => organization.name === "datawhalechina",
+)!;
+const comparisonOrganizations = organizations
+  .filter((organization) => organization.name !== "datawhalechina")
+  .sort((left, right) => right.starAdd - left.starAdd)
+  .slice(0, 3);
+const peerRows = [datawhale, ...comparisonOrganizations];
+const peerMaxGrowth = Math.max(...peerRows.map((organization) => organization.starAdd));
+const runnerUpGrowth = comparisonOrganizations[0]?.starAdd ?? 1;
+const growthMultiple = (datawhale.starAdd / runnerUpGrowth).toFixed(1);
 
-const peerCards: PeerCard[] = (topOrganizations as OrganizationRecord[])
-  .filter((organization) => organization.name in peerGrowthByName)
-  .map((organization) => ({
-    name: organization.name,
-    label: peerGrowthByName[organization.name].label,
-    growth: peerGrowthByName[organization.name].growth,
-    rank: organization.rank,
-    totalStars: organization.star_count,
-    note: peerGrowthByName[organization.name].note,
-  }))
-  .sort((left, right) => right.growth - left.growth);
-
-const takeawayCards = [
-  {
-    tag: "增长模型",
-    title: "超头部项目继续拉动组织增长",
-    text: "hello-agents 和 easy-vibe 两个项目合计新增 40,000+ 颗 Star，占项目总增量 65%+。",
-  },
-  {
-    tag: "时间节奏",
-    title: "5 月是本季度最关键的增长月份",
-    text: "5 月由 hello-agents 单月 13,000+ 和 easy-vibe 单月 8,000+ 共同拉动，把季度热度推到高点。",
-  },
-  {
-    tag: "外部对照",
-    title: "Datawhale 进入头部竞争阶段",
-    text: "在知识分享类组织里，Datawhale 的本期 Star 增量约为第二名的 5.7 倍，位置已经从快速追赶进入头部竞争。",
-  },
+const metricCards = [
+  { value: "第 20 位", label: "全球组织排名", note: "较 6 月底再前进 2 位" },
+  { value: "391,164", label: "组织总 Star", note: "从 35.2 万提升至 39.1 万" },
+  { value: "+38,549", label: "本季度新增 Star", note: "同类知识分享组织中增量第一" },
+  { value: topFiveShare + "%", label: "Top5 贡献", note: "合计新增 " + formatNumber(topFiveGrowth) + " 颗" },
 ];
 
 export default function ShowcasePage() {
+  const maxPulse = Math.max(...monthlyPulse.map((month) => month.value));
+
   return (
     <div className={styles.page}>
-      <div className={styles.scanline} />
-      <header className={styles.header}>
-        <div className={styles.brandBlock}>
-          <span className={styles.brand}>
-            State-of-Datawhale 季度观察 (数据抓取 2026-06-26)
-          </span>
-        </div>
-      </header>
-
-      <main className={styles.main}>
-        <section id="overview" className={styles.hero}>
+      <main id="top" className={styles.main}>
+        <section className={styles.hero}>
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>2026 年第二季度增长海报</p>
-            <h1 className={styles.heroTitle}>
-              <span className={styles.highlight}>
-                Datawhale在2026年第二季度继续刷新全球组织排名
-              </span>
+            <div className={styles.issueLine}>
+              <span>2026 · Q3</span>
+              <span>季度增长观察</span>
+            </div>
+            <h1>
+              从 35.2 万到
+              <span>39.1 万</span>
             </h1>
             <p className={styles.heroLead}>
-              2026 年 4-6 月，Datawhale 总 Star 数从 28w 进一步提升到 35w，全球组织排名从第 29 位升到第 22 位。组织内部仍由{" "}
-              <strong>{getProjectDisplayName("hello-agents")}</strong>{" "}
-              和 AI Agent、大模型学习类项目驱动，5 月成为本季度最关键的增长月份。
+              7—9 月，Datawhale 延续高位增长，GitHub 全球组织排名升至第 20。
+              hello-agents 继续领跑，成熟项目稳定接力，新项目开始提供下一阶段动力。
+            </p>
+            <div className={styles.heroNotes}>
+              <span>数据抓取：2026 年 9 月 11 日</span>
+              <span>9 月为进行中数据</span>
+            </div>
+          </div>
+
+          <aside className={styles.rankPoster} aria-label="全球排名变化">
+            <span className={styles.posterKicker}>GLOBAL RANK</span>
+            <div className={styles.rankStatement}>
+              <span>Star 排名</span>
+              <strong>22 → 20</strong>
+            </div>
+          </aside>
+        </section>
+
+        <section className={styles.metricStrip} aria-label="核心数据">
+          {metricCards.map((metric, index) => (
+            <article className={styles.metric} key={metric.label}>
+              <span className={styles.metricIndex}>{"0" + (index + 1)}</span>
+              <strong>{metric.value}</strong>
+              <h2>{metric.label}</h2>
+              <p>{metric.note}</p>
+            </article>
+          ))}
+        </section>
+
+        <section id="pulse" className={styles.storySection}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <span className={styles.sectionNumber}>01 / QUARTERLY PULSE</span>
+              <h2>组织项目的增长仍在高位</h2>
+            </div>
+            <p>
+              当前 {thousandStarProjects.length} 个千星项目在 7—9 月共新增{" "}
+              <strong>{formatNumber(projectQuarterGrowth)}</strong> 颗 Star。7 月是完整月份中的高点，
+              9 月仅统计至 11 日，不与前两个月直接比较。
             </p>
           </div>
 
-          <div className={styles.heroPanel}>
-            <article className={styles.rankCard}>
-              <div className={styles.rankHeader}>
-                <span className={styles.cardLabel}>全球排名提升</span>
-              </div>
-              <div className={styles.rankTrack}>
-                <div className={`${styles.rankNode} ${styles.rankNodeStart}`}>
-                  <span className={styles.rankNodeLabel}>2026-04-01</span>
-                  <strong className={styles.rankValue}>29</strong>
+          <div className={styles.pulseChart}>
+            {monthlyPulse.map((item, index) => (
+              <article className={styles.pulseColumn} key={item.month}>
+                <div className={styles.pulseLabelBlock}>
+                  <span>{item.label}</span>
+                  {item.month === "2026-9" && (
+                    <small>截至 9 月 11 日</small>
+                  )}
                 </div>
-                <div className={styles.rankLine} />
-                <div
-                  className={`${styles.rankNode} ${styles.rankNodeEnd} ${styles.rankNodeActive}`}
-                >
-                  <span className={styles.rankNodeLabel}>2026-06-26</span>
-                  <strong className={styles.rankValue}>22</strong>
+                <div className={styles.pulseTrack}>
+                  <span
+                    className={styles.pulseFill}
+                    style={
+                      {
+                        "--bar-width": Math.max((item.value / maxPulse) * 100, 12) + "%",
+                        "--bar-delay": index * 90 + "ms",
+                      } as CSSProperties
+                    }
+                  />
                 </div>
-              </div>
-            </article>
-
-            <div className={styles.metricGrid}>
-              {signalMetrics.map((metric) => (
-                <article key={metric.label} className={styles.metricCard}>
-                  <span className={styles.metricLabel}>{metric.label}</span>
-                  <strong className={styles.metricValue}>{metric.value}</strong>
-                  <p className={styles.metricNote}>{metric.note}</p>
-                </article>
-              ))}
-            </div>
+                <strong className={styles.pulseNumber}>+{formatNumber(item.value)}</strong>
+              </article>
+            ))}
           </div>
         </section>
 
-        <section id="momentum" className={styles.momentumSection}>
-          <article className={styles.sectionCard}>
-            <div className={styles.sectionIntro}>
-              <span className={styles.sectionTag}>季度增长</span>
-              <h2 className={styles.sectionTitle}>
-                千星项目总量继续抬升，5 月出现季度增长峰值。
-              </h2>
-              <p className={styles.sectionText}>
-                当前 Star 数超过 1000 的项目在 4-6 月合计新增 60,000+ 颗 Star，其中 4 月新增 19,000+，5 月冲高到 29,000+，6 月回落到 15,000+。
-              </p>
+        <section id="projects" className={styles.storySection}>
+          <div className={styles.sectionHeader}>
+            <div>
+              <span className={styles.sectionNumber}>02 / GROWTH ENGINE</span>
+              <h2>头部带动，多项目稳定补位</h2>
             </div>
-
-            <div className={styles.pulseRows}>
-              {quarterlyPulse.map((item) => (
-                <div key={item.month} className={styles.pulseRow}>
-                  <span className={styles.pulseLabel}>{item.label}</span>
-                  <div className={styles.pulseTrack}>
-                    <span
-                      className={styles.pulseFill}
-                      style={{
-                        width: `${(item.total / quarterlyPulse[2].total) * 100}%`,
-                      }}
-                    />
-                  </div>
-                  <strong className={styles.pulseValue}>
-                    {formatNumber(item.total)}
-                  </strong>
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.pulseSummary}>
-              <span className={styles.summaryTag}>五月高点</span>
-              <p className={styles.summaryText}>
-                5 月由 {getProjectDisplayName("hello-agents")} 单月新增 13,000+ 和{" "}
-                {getProjectDisplayName("easy-vibe")} 单月新增 8,000+ 共同拉动，是本季度最明显的热度峰值。
-              </p>
-            </div>
-          </article>
-
-          <article className={styles.sectionCard}>
-            <div className={styles.sectionIntro}>
-              <span className={styles.sectionTag}>增长引擎</span>
-              <h2 className={styles.sectionTitle}>
-                增长 Top5 合计拿下 53,000+ 颗 Star。
-              </h2>
-              <p className={styles.sectionText}>
-                文档指出，本季度增长高度集中在头部：hello-agents 和 easy-vibe 两个项目合计新增 40,000+ 颗 Star，占项目总增量 65%+；增长 Top5 占比超过 80%。
-              </p>
-            </div>
-
-            <div className={styles.stackRows}>
-              {topProjects.map((project) => (
-                <div key={project.name} className={styles.stackRow}>
-                  <div className={styles.stackHeader}>
-                    <span className={styles.stackName}>
-                      {project.displayName}
-                    </span>
-                    <strong className={styles.stackValue}>
-                      +{formatNumber(project.quarterAdd)}
-                    </strong>
-                  </div>
-                  <div className={styles.stackTrack}>
-                    <span
-                      className={styles.stackFill}
-                      style={{
-                        width: `${(project.quarterAdd / topProjects[0].quarterAdd) * 100}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.engineQuote}>
-              <span className={styles.summaryTag}>核心观察</span>
-              <p className={styles.summaryText}>
-                {getProjectDisplayName("hello-agents")}{" "}
-                二季度新增 29,809 颗 Star，比一季度增量还要更高，继续稳居 Datawhale 内部第一。
-              </p>
-            </div>
-          </article>
-        </section>
-
-        <section id="projects" className={styles.sectionHeading}>
-          <div>
-            <span className={styles.sectionTag}>项目增长Top5</span>
-            <h2 className={styles.headingTitle}>
-              增长前五项目，继续撑起 Q2 的主要热度。
-            </h2>
+            <p>
+              增长 Top5 合计新增 <strong>{formatNumber(topFiveGrowth)}</strong> 颗 Star，
+              占千星项目本季度新增量约 <strong>{topFiveShare}%</strong>。
+              hello-agents 一项贡献近半，但增长结构正变得更加多元。
+            </p>
           </div>
-        </section>
 
-        <section className={styles.projectGrid}>
-          {topProjects.map((project, index) => (
-            <article
-              key={project.name}
-              className={`${styles.projectCard} ${index === 0 ? styles.projectCardFeatured : ""}`}
-            >
-              <div className={styles.projectHeader}>
-                <div>
-                  <span className={styles.projectIndex}>{`0${index + 1}`}</span>
-                  <h3 className={styles.projectName}>{project.displayName}</h3>
+          <div className={styles.projectList}>
+            {topProjects.map((project, index) => (
+              <article
+                className={styles.projectRow + (index === 0 ? " " + styles.projectRowLead : "")}
+                key={project.name}
+              >
+                <div className={styles.projectRank}>{String(index + 1).padStart(2, "0")}</div>
+                <div className={styles.projectIdentity}>
+                  <h3>{project.name}</h3>
+                  <p>{project.insight}</p>
                 </div>
-                <div className={styles.projectMetrics}>
-                  <div className={styles.projectMetric}>
-                    <span className={styles.projectMetricLabel}>季度新增</span>
-                    <strong className={styles.projectMetricValue}>
-                      +{formatNumber(project.quarterAdd)}
-                    </strong>
-                  </div>
-                  <div className={styles.projectMetric}>
-                    <span className={styles.projectMetricLabel}>
-                      六月底总Star数
-                    </span>
-                    <strong className={styles.projectMetricValue}>
-                      {formatNumber(project.totalStars)}
-                    </strong>
-                  </div>
+                <div className={styles.projectNumbers}>
+                  <span>季度新增</span>
+                  <strong>+{formatNumber(project.quarterAdd)}</strong>
+                  <small>总计 {formatNumber(project.star_count)}</small>
                 </div>
-              </div>
-
-              <p className={styles.projectInsight}>{project.insight}</p>
-
-              <div className={styles.sparkPanel}>
-                <div className={styles.breakoutBars}>
-                  {project.monthlyTotals.map((value, monthIndex) => (
-                    <div
-                      key={`${project.name}-total-${monthLabels[monthKeys[monthIndex]]}`}
-                      className={styles.breakoutRow}
-                    >
-                      <span className={styles.breakoutMonth}>
-                        {monthLabels[monthKeys[monthIndex]]}
-                      </span>
-                      <div className={styles.breakoutTrack}>
-                        <span
-                          className={styles.breakoutFill}
+                <div className={styles.miniBars} aria-label={project.name + " 月度新增"}>
+                  {project.monthlyAdds.map((value, monthIndex) => (
+                    <div className={styles.miniBarRow} key={project.name + "-" + months[monthIndex]}>
+                      <span>{monthLabels[months[monthIndex]]}</span>
+                      <div>
+                        <i
                           style={{
-                            width: `${(value / Math.max(...project.monthlyTotals, 1)) * 100}%`,
+                            width:
+                              Math.max(
+                                (value / Math.max(...project.monthlyAdds, 1)) * 100,
+                                value > 0 ? 5 : 0,
+                              ) + "%",
                           }}
                         />
                       </div>
-                      <strong className={styles.breakoutCount}>
-                        {formatNumber(value)}
-                      </strong>
+                      <b>{formatNumber(value)}</b>
                     </div>
                   ))}
                 </div>
-              </div>
-            </article>
-          ))}
-        </section>
-
-        <section className={styles.sectionHeading}>
-          <div>
-            <span className={styles.sectionTag}>新项目增长Top3</span>
-            <h2 className={styles.headingTitle}>
-              新项目在 Q2 已经跑出清晰的增长曲线。
-            </h2>
+              </article>
+            ))}
           </div>
         </section>
 
-        <section className={styles.breakoutGrid}>
-          {breakoutProjects.map((project) => (
-            <article key={project.name} className={styles.breakoutCard}>
-              <div className={styles.breakoutHeader}>
-                <div>
-                  <h3 className={styles.breakoutName}>{project.displayName}</h3>
-                </div>
-                <strong className={styles.breakoutValue}>
-                  +{formatNumber(project.quarterAdd)}
-                </strong>
-              </div>
-
-              <p className={styles.breakoutText}>{project.insight}</p>
-
-	              <div className={styles.breakoutBars}>
-	                {project.monthlyTotals.map((value, monthIndex) => (
-	                  <div
-	                    key={`${project.name}-bar-${monthLabels[monthKeys[monthIndex]]}`}
-	                    className={styles.breakoutRow}
-	                  >
-                    <span className={styles.breakoutMonth}>
-                      {monthLabels[monthKeys[monthIndex]]}
+        <section className={styles.breakoutSection}>
+          <div className={styles.breakoutIntro}>
+            <span className={styles.sectionNumber}>03 / NEW SIGNALS</span>
+            <h2>新项目在茁壮成长</h2>
+            <p>
+              新项目规模尚小，但方向更聚焦：大模型推理、系统化深度学习，以及个性化技术情报。
+            </p>
+          </div>
+          <div className={styles.breakoutGrid}>
+            {breakoutProjects.map((project, index) => (
+              <article className={styles.breakoutCard} key={project.name}>
+                <span className={styles.breakoutOrdinal}>{"SIGNAL / 0" + (index + 1)}</span>
+                <h3>{project.name}</h3>
+                <strong>+{formatNumber(project.quarterAdd)}</strong>
+                <p>{project.insight}</p>
+                <div className={styles.monthChips}>
+                  {project.monthlyAdds.map((value, monthIndex) => (
+                    <span key={project.name + "-" + months[monthIndex]}>
+                      {monthLabels[months[monthIndex]]} {formatNumber(value)}
                     </span>
-                    <div className={styles.breakoutTrack}>
-	                      <span
-	                        className={styles.breakoutFill}
-	                        style={{
-	                          width: `${(value / Math.max(...project.monthlyTotals, 1)) * 100}%`,
-	                        }}
-	                      />
-                    </div>
-                    <strong className={styles.breakoutCount}>
-                      {formatNumber(value)}
-                    </strong>
-                  </div>
-                ))}
-              </div>
-
-              <div className={styles.breakoutFooter}>
-                <span className={styles.projectMetricLabel}>六月底总Star数</span>
-                <strong className={styles.breakoutTotal}>
-                  {formatNumber(project.totalStars)}
-                </strong>
-              </div>
-            </article>
-          ))}
-        </section>
-
-        <section id="benchmark" className={styles.dualSection}>
-          <article className={styles.sectionCard}>
-            <div className={styles.sectionIntro}>
-              <span className={styles.sectionTag}>外部对照</span>
-              <h2 className={styles.sectionTitle}>
-                对外部同类组织，Datawhale 的速度差继续拉开。
-              </h2>
-              <p className={styles.sectionText}>
-                文档指出，Datawhale 总 Star 数达到 352,615，GitHub 全球组织排名第 22，较 4 月 1 日继续前进 7 名；本期 Star 增量为 68,509，约为第二名的 5.7 倍。
-              </p>
-            </div>
-
-            <div className={styles.peerTable}>
-              {peerCards.map((peer) => (
-                <div
-                  key={peer.name}
-                  className={`${styles.peerRow} ${
-                    peer.name === "datawhalechina" ? styles.peerRowActive : ""
-                  }`}
-                >
-                  <div className={styles.peerIdentity}>
-                    <span className={styles.peerName}>{peer.label}</span>
-                    <span className={styles.peerNote}>{peer.note}</span>
-                  </div>
-                  <span className={styles.peerStat}>第 {peer.rank} 位</span>
-                  <span className={styles.peerStat}>
-                    共 {formatNumber(peer.totalStars)} Star
-                  </span>
-                  <span className={styles.peerGrowth}>
-                    +{formatNumber(peer.growth)}
-                  </span>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </article>
-
-          <article className={styles.sectionCard}>
-            <div className={styles.sectionIntro}>
-              <span className={styles.sectionTag}>关键结论</span>
-              <h2 className={styles.sectionTitle}>
-                这份报告真正说明了三件事。
-              </h2>
-            </div>
-
-            <div className={styles.takeawayList}>
-              {takeawayCards.map((card) => (
-                <article key={card.title} className={styles.takeawayCard}>
-                  <span className={styles.takeawayTag}>{card.tag}</span>
-                  <h3 className={styles.takeawayTitle}>{card.title}</h3>
-                  <p className={styles.takeawayText}>{card.text}</p>
-                </article>
-              ))}
-            </div>
-          </article>
+              </article>
+            ))}
+          </div>
         </section>
+
+        <section id="benchmark" className={styles.benchmarkSection}>
+          <div className={styles.benchmarkCopy}>
+            <span className={styles.sectionNumber}>04 / PEER BENCHMARK</span>
+            <h2>增速领先第二名 {growthMultiple} 倍</h2>
+            <p>
+              Datawhale 本季度新增 38,549 颗 Star，同榜第二名 EbookFoundation 新增 5,318 颗。
+              组织已从快速追赶进入全球知识分享类组织的头部竞争阶段。
+            </p>
+          </div>
+
+          <div className={styles.peerList}>
+            {peerRows.map((organization) => (
+              <article
+                className={
+                  styles.peerRow +
+                  (organization.name === "datawhalechina" ? " " + styles.peerRowActive : "")
+                }
+                key={organization.name}
+              >
+                <div className={styles.peerHeader}>
+                  <div>
+                    <h3>{organization.name === "datawhalechina" ? "Datawhale" : organization.name}</h3>
+                    <span>全球第 {organization.rank} 位 · {formatNumber(organization.star_count)} Star</span>
+                  </div>
+                  <strong>+{formatNumber(organization.starAdd)}</strong>
+                </div>
+                <div className={styles.peerTrack}>
+                  <i style={{ width: (organization.starAdd / peerMaxGrowth) * 100 + "%" }} />
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <footer className={styles.footer}>
+          <span>STATE OF DATAWHALE · 2026 Q3</span>
+          <p>* 本页 9 月数据统计截至 2026 年 9 月 11 日，季度结论为阶段性观察。</p>
+        </footer>
       </main>
     </div>
   );

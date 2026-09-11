@@ -167,6 +167,8 @@ export function DatawhaleProjectOverview<T extends DatawhaleSourceItem>({
       .sort((left, right) => right.totalStars - left.totalStars);
   }, [monthKeys, normalizedRange.toMonth, source]);
 
+  const heatmapHeight = Math.max(1100, rankedProjects.length * 52 + 220);
+
   const colorByName = useMemo(
     () =>
       new Map(
@@ -231,7 +233,7 @@ export function DatawhaleProjectOverview<T extends DatawhaleSourceItem>({
       .sort((left, right) => left - right);
     const maxMonthlyGrowth =
       monthlyGrowthValues[Math.floor(monthlyGrowthValues.length * 0.95)] || 1;
-    const visibleLabelThreshold = Math.max(100, maxMonthlyGrowth * 0.18);
+    const visibleLabelThreshold = 200;
 
     const sharedTextStyle = {
       color: "#334155",
@@ -355,10 +357,10 @@ export function DatawhaleProjectOverview<T extends DatawhaleSourceItem>({
         textStyle: sharedTextStyle,
         animationDuration: 500,
         grid: {
-          left: 268,
+          left: 320,
           right: 84,
           top: 72,
-          bottom: 74,
+          bottom: 110,
           containLabel: false,
         },
         tooltip: {
@@ -395,12 +397,12 @@ export function DatawhaleProjectOverview<T extends DatawhaleSourceItem>({
           bottom: 18,
           inRange: {
             color: [
-              "#f8fafc",
-              "#dbeafe",
-              "#60a5fa",
-              "#2563eb",
-              "#f59e0b",
-              "#ef4444",
+              "#fffaf0",
+              "#ffedd5",
+              "#fed7aa",
+              "#fb923c",
+              "#f97316",
+              "#c2410c",
             ],
           },
           textStyle: {
@@ -436,8 +438,10 @@ export function DatawhaleProjectOverview<T extends DatawhaleSourceItem>({
             color: "#334155",
             fontSize: 12,
             fontWeight: 700,
-            width: 248,
-            overflow: "truncate",
+            interval: 0,
+            width: 292,
+            overflow: "break",
+            lineHeight: 16,
           },
         },
         graphic: {
@@ -459,12 +463,21 @@ export function DatawhaleProjectOverview<T extends DatawhaleSourceItem>({
             data: heatmapData,
             label: {
               show: true,
-              color: "#0f172a",
               fontSize: 10,
-              formatter: (params: { value: [number, number, number] }) =>
-                params.value[2] >= visibleLabelThreshold
-                  ? formatNumber(params.value[2])
-                  : "",
+              formatter: (params: { value: [number, number, number] }) => {
+                const value = params.value[2];
+                if (value <= visibleLabelThreshold) {
+                  return "";
+                }
+
+                const styleName =
+                  value >= maxMonthlyGrowth * 0.55 ? "light" : "dark";
+                return `{${styleName}|${formatNumber(value)}}`;
+              },
+              rich: {
+                light: { color: "#ffffff" },
+                dark: { color: "#1e293b" },
+              },
             },
             emphasis: {
               itemStyle: {
@@ -533,7 +546,11 @@ export function DatawhaleProjectOverview<T extends DatawhaleSourceItem>({
             <div ref={barChartRef} className={styles.barChart} />
           </section>
           <section className={styles.chartPanel} aria-label={`${title}月增长`}>
-            <div ref={heatmapChartRef} className={styles.heatmapChart} />
+            <div
+              ref={heatmapChartRef}
+              className={styles.heatmapChart}
+              style={{ height: `${heatmapHeight}px` }}
+            />
           </section>
         </div>
       </main>

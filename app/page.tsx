@@ -21,6 +21,11 @@ export default function Home() {
           <h2>Datawhale项目本年度Star增长数Top5</h2>
         </div>
       </Link>
+      <Link href="/datawhale/projectQuarterAddTop5">
+        <div className={styles.link}>
+          <h2>Datawhale项目本季度Star增长数Top5</h2>
+        </div>
+      </Link>
       <Link href="/datawhale/newProjectAddTop3">
         <div className={styles.link}>
           <h2>Datawhale新创建的项目Star增长数Top3</h2>

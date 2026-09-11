@@ -69,8 +69,11 @@ async function getGithubStarCount(
   monthlyStars = {},
   monthlyTotalStars = {},
   starCount = 0,
-  currentRepoStarCount = starCount,
 ) {
+  if (token) {
+    return fetchGithubStarCountByHistory(organizationName, repo, token);
+  }
+
   const output = {
     repo_name: repo,
     monthly_stars: { ...monthlyStars },
@@ -98,17 +101,6 @@ async function getGithubStarCount(
   const pageSize = 100;
   let page = Math.floor(output.star_count / pageSize) + 1;
   let totalStars = output.star_count;
-  const currentRepoPageCount = Math.ceil(currentRepoStarCount / pageSize);
-
-  if (page > 400 || currentRepoPageCount > 400) {
-    return fetchGithubStarCountByGraphql(
-      organizationName,
-      repo,
-      token,
-      output,
-      startUpdateDate,
-    );
-  }
 
   while (needNextPage) {
     try {
@@ -159,94 +151,86 @@ async function getGithubStarCount(
   return output;
 }
 
-async function fetchGithubStarCountByGraphql(
+async function fetchGithubStarCountByHistory(
   organizationName,
   repo,
   token,
-  output,
-  startUpdateDate,
 ) {
   if (!token) {
-    throw new Error(`fetch repo error: ${repo}, GraphQL requires GitHub token`);
+    throw new Error(
+      `fetch repo error: ${repo}, star history requires GitHub token`,
+    );
   }
 
-  let cursor = null;
-  let totalStars = output.star_count;
-  let shouldContinue = true;
-  const fetchedDates = [];
+  const weeksByTimestamp = new Map();
+  let page = 1;
+  let hasNextPage = true;
 
-  while (shouldContinue) {
+  while (hasNextPage) {
     try {
-      console.log(`fetch repo by graphql: ${repo}, cursor: ${cursor || "HEAD"}`);
-      const response = await axios.post(
-        "https://api.github.com/graphql",
-        {
-          query: `
-            query RepoStargazers($owner: String!, $name: String!, $cursor: String) {
-              repository(owner: $owner, name: $name) {
-                stargazers(
-                  first: 100
-                  after: $cursor
-                  orderBy: { field: STARRED_AT, direction: DESC }
-                ) {
-                  pageInfo {
-                    hasNextPage
-                    endCursor
-                  }
-                  edges {
-                    starredAt
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            owner: organizationName,
-            name: repo,
-            cursor,
-          },
-        },
+      console.log(`fetch repo history: ${repo}, page: ${page}`);
+      const response = await axios.get(
+        `https://api.github.com/repos/${organizationName}/${repo}/stargazers/history`,
         {
           headers: {
+            accept: "application/vnd.github+json",
             authorization: `Bearer ${token}`,
+            "X-GitHub-Api-Version": "2026-03-10",
+          },
+          params: {
+            per_page: 100,
+            page,
           },
         },
       );
 
-      if (response.data.errors) {
-        throw new Error(JSON.stringify(response.data.errors));
+      for (const week of response.data) {
+        weeksByTimestamp.set(week.week, week);
       }
 
-      const stargazers = response.data.data.repository.stargazers;
-      const edges = stargazers.edges || [];
-      for (const edge of edges) {
-        const date = dayjs(edge.starredAt);
-        if (date.isBefore(startUpdateDate)) {
-          shouldContinue = false;
-          continue;
-        }
-        fetchedDates.push(date);
-      }
-
-      cursor = stargazers.pageInfo.endCursor;
-      shouldContinue = shouldContinue && stargazers.pageInfo.hasNextPage;
+      hasNextPage = /rel="next"/.test(response.headers.link || "");
+      page += 1;
     } catch (error) {
       throw new Error(
-        `fetch repo error: ${repo}, graphql cursor: ${cursor || "HEAD"}, ${formatAxiosError(error)}`,
+        `fetch repo history error: ${repo}, page: ${page}, ${formatAxiosError(error)}`,
       );
     }
   }
 
-  fetchedDates.sort((left, right) => left.valueOf() - right.valueOf());
-  for (const date of fetchedDates) {
-    totalStars += 1;
-    const monthKey = `${date.year()}-${date.month() + 1}`;
-    output.monthly_stars[monthKey] =
-      (output.monthly_stars[monthKey] || 0) + 1;
-    output.monthly_total_stars[monthKey] = totalStars;
+  const output = {
+    repo_name: repo,
+    monthly_stars: {},
+    monthly_total_stars: {},
+    star_count: 0,
+  };
+  const weeks = [...weeksByTimestamp.values()].sort(
+    (left, right) => left.week - right.week,
+  );
+
+  for (const week of weeks) {
+    const days = Array.isArray(week.days) ? week.days : [];
+    const calculatedWeekTotal = days.reduce((sum, count) => sum + count, 0);
+    if (calculatedWeekTotal !== week.total) {
+      throw new Error(
+        `fetch repo history error: ${repo}, week ${week.week} total mismatch`,
+      );
+    }
+
+    for (let dayIndex = 0; dayIndex < days.length; dayIndex += 1) {
+      const count = days[dayIndex];
+      if (count === 0) {
+        continue;
+      }
+
+      const date = new Date((week.week + dayIndex * 24 * 60 * 60) * 1000);
+      const monthKey = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}`;
+      output.star_count += count;
+      output.monthly_stars[monthKey] =
+        (output.monthly_stars[monthKey] || 0) + count;
+      output.monthly_total_stars[monthKey] = output.star_count;
+    }
   }
 
-  output.star_count = totalStars;
   return output;
 }
 
@@ -329,7 +313,6 @@ async function fetchOrganizationRepoDetail(
       originDetail ? originDetail.monthly_stars : {},
       originDetail ? originDetail.monthly_total_stars : {},
       originDetail ? originDetail.star_count : 0,
-      repo.star_count,
     );
     const filledOutput = fillMissingMonths(output, monthKey);
     repoDetailList.push(filledOutput);
@@ -359,7 +342,7 @@ function formatAxiosError(error) {
 
 module.exports = {
   fetchOrganizationRepoDetail,
-  fetchGithubStarCountByGraphql,
+  fetchGithubStarCountByHistory,
   fillMissingMonths,
   formatAxiosError,
   getGithubRepoByOrganizationName,

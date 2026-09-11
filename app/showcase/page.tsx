@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import datasource from "@/data/organization_datasource.json";
-import topOrganizations from "@/data/allOrganization/2026-04-01/top_10_knowledge_sharing_organization.json";
+import topOrganizations from "@/data/allOrganization/2026-06-26/top_10_knowledge_sharing_organization.json";
 import styles from "./page.module.css";
 
-type MonthKey = "2026-1" | "2026-2" | "2026-3";
+type MonthKey = "2026-4" | "2026-5" | "2026-6";
 
 type MonthlySeries = Record<string, number>;
 
@@ -23,7 +23,7 @@ type OrganizationRecord = {
 type ProjectCard = {
   name: string;
   displayName: string;
-  q1Add: number;
+  quarterAdd: number;
   totalStars: number;
   monthlyAdds: number[];
   monthlyTotals: number[];
@@ -40,16 +40,16 @@ type PeerCard = {
 };
 
 export const metadata: Metadata = {
-  title: "Datawhale 季度观察 | 2026 年第一季度增长展示",
-  description: "基于 2026 年 1 至 3 月报告生成的 Datawhale 中文增长展示页。",
+  title: "Datawhale 季度观察 | 2026 年第二季度增长海报",
+  description: "基于飞书文档《2026年4-6月datawhale项目及外部同类组织数据分析》生成的 Datawhale 中文增长展示页。",
 };
 
-const monthKeys: MonthKey[] = ["2026-1", "2026-2", "2026-3"];
+const monthKeys: MonthKey[] = ["2026-4", "2026-5", "2026-6"];
 
 const monthLabels: Record<MonthKey, string> = {
-  "2026-1": "1 月",
-  "2026-2": "2 月",
-  "2026-3": "3 月",
+  "2026-4": "4 月",
+  "2026-5": "5 月",
+  "2026-6": "6 月",
 };
 
 const projectDisplayNames: Record<string, string> = {
@@ -62,27 +62,31 @@ const projectDisplayNames: Record<string, string> = {
   "agent-skills-with-anthropic": "agent-skills-with-anthropic",
   "base-llm": "base-llm",
   "self-llm": "self-llm",
+  "Agent-Learning-Hub": "Agent-Learning-Hub",
+  "deepagents-in-action": "deepagents-in-action",
+  "hello-generic-agent": "hello-generic-agent",
 };
 
 const topProjectInsights: Record<string, string> = {
   "hello-agents":
-    "第一季度独增 18,904，3 月单月再推高 9,020，并在 2026 年 3 月底超越 self-llm，成为组织内Star数第一项目。",
+    "二季度新增 29,809 颗 Star，5 月单月新增 13,098，是本期最强爆发点，也是组织增长最核心的发动机。",
   "happy-llm":
-    "高基数下依旧稳定输出，1 月和 3 月都接近 1,900，已经从爆发型项目切入长期Star增长的区间。",
+    "高基数下继续稳定增长，4-6 月新增 3,272，6 月底总 Star 数达到 31,575，是组织 Star 结构里的重要基本盘。",
   "easy-vibe":
-    "1 月冷启动冲到 2,169，2 月短暂回落后 3 月继续拉升，扩散不是一次性流量。",
+    "二季度新增 12,534，5 月单月新增 8,058，说明项目在一季度完成冷启动后又迎来明显扩散。",
   "all-in-rag":
-    "第一季度合计新增 2,909，3 月显著抬升，组织内第二增长梯队已经开始成形。",
-  "vibe-vibe":
-    "走势最平滑，1 月起量后连续三个月保持增长，说明新用户获取具备持续性。",
+    "二季度新增 3,447，4 月、5 月、6 月都维持较高水平，是 RAG 方向持续吸引学习者的稳定项目。",
+  "Agent-Learning-Hub":
+    "二季度新增 4,313，5 月和 6 月连续维持两千级增长，是本期唯一完全在二季度起量并进入增长 Top5 的项目。",
 };
 
 const breakoutInsights: Record<string, string> = {
-  "hello-claw":
-    "前两个月几乎没有起量，3 月单月直接冲出 1,518，爆发强度在新项目里最明显。",
-  "agent-skills-with-anthropic":
-    "2 月开始获得首批关注，3 月继续新增 236，第一季度累计 349，曲线仍在加速。",
-  "base-llm": "第一季度累计新增 447，3 月单月贡献 230，增长坡度已经开始变陡。",
+  "Agent-Learning-Hub":
+    "它不是传统教程，而是一份可以照着执行的 AI Agent 学习 todo list，整理社区分享、论文、官方博客和工程经验，因此很快获得关注。",
+  "deepagents-in-action":
+    "基于 LangChain/LangGraph 生态构建生产级 AI Agent，5 月新增 118，6 月直接提升到 801，曲线已经明显变陡。",
+  "hello-generic-agent":
+    "Generic Agent 入门教程，围绕上下文信息密度最大化展开，二季度完成从 0 到数百 Star 的冷启动。",
 };
 
 const peerGrowthByName: Record<
@@ -90,24 +94,24 @@ const peerGrowthByName: Record<
   { growth: number; note: string; label: string }
 > = {
   datawhalechina: {
-    growth: 48868,
-    note: "全球排名从第 41 位升至第 29 位，季度增量约为第二名的 7 倍。",
+    growth: 68509,
+    note: "全球排名从第 29 位升至第 22 位，本期同榜组织中增量最强。",
     label: "Datawhale",
   },
-  TheAlgorithms: {
-    growth: 6689,
-    note: "知识分享组织里基数最高之一，但季度增量远低于 Datawhale。",
-    label: "TheAlgorithms",
-  },
-  "dair-ai": {
-    growth: 5777,
-    note: "同样保持增长，但在总量和增速上都被 Datawhale 甩开。",
-    label: "dair-ai",
+  freeCodeCamp: {
+    growth: 12101,
+    note: "同榜增量第二，但 Datawhale 的本期增量约为它的 5.7 倍。",
+    label: "freeCodeCamp",
   },
   EbookFoundation: {
-    growth: 5390,
-    note: "成熟组织依旧稳健，不过季度提速明显弱于 Datawhale。",
+    growth: 6114,
+    note: "排名小幅前进，总量依旧领先，但季度速度明显低于 Datawhale。",
     label: "EbookFoundation",
+  },
+  TheAlgorithms: {
+    growth: 5584,
+    note: "知识分享组织里的高基数代表，本期稳定增长但没有明显加速。",
+    label: "TheAlgorithms",
   },
 };
 
@@ -132,8 +136,8 @@ const topProjects: ProjectCard[] = (
 ).map((project) => ({
   name: project.name,
   displayName: getProjectDisplayName(project.name),
-  q1Add: sumQuarter(project.monthly_stars),
-  totalStars: project.monthly_total_stars["2026-3"] ?? project.star_count,
+  quarterAdd: sumQuarter(project.monthly_stars),
+  totalStars: project.monthly_total_stars["2026-6"] ?? project.star_count,
   monthlyAdds: monthKeys.map((month) => project.monthly_stars[month] ?? 0),
   monthlyTotals: monthKeys.map(
     (month) => project.monthly_total_stars[month] ?? 0,
@@ -146,8 +150,8 @@ const breakoutProjects: ProjectCard[] = (
 ).map((project) => ({
   name: project.name,
   displayName: getProjectDisplayName(project.name),
-  q1Add: sumQuarter(project.monthly_stars),
-  totalStars: project.monthly_total_stars["2026-3"] ?? project.star_count,
+  quarterAdd: sumQuarter(project.monthly_stars),
+  totalStars: project.monthly_total_stars["2026-6"] ?? project.star_count,
   monthlyAdds: monthKeys.map((month) => project.monthly_stars[month] ?? 0),
   monthlyTotals: monthKeys.map(
     (month) => project.monthly_total_stars[month] ?? 0,
@@ -157,7 +161,7 @@ const breakoutProjects: ProjectCard[] = (
 
 const quarterlyPulse = monthKeys.map((month) => {
   const total = (datasource.projectInfo as ProjectRecord[])
-    .filter((project) => (project.monthly_total_stars["2026-3"] ?? 0) >= 1000)
+    .filter((project) => (project.monthly_total_stars["2026-6"] ?? 0) >= 1000)
     .reduce((sum, project) => sum + (project.monthly_total_stars[month] ?? 0), 0);
 
   return {
@@ -168,30 +172,30 @@ const quarterlyPulse = monthKeys.map((month) => {
 });
 
 const topFiveTotal = topProjects.reduce(
-  (sum, project) => sum + project.q1Add,
+  (sum, project) => sum + project.quarterAdd,
   0,
 );
 
 const signalMetrics = [
   {
     label: "全球排名",
-    value: "第 29 位",
-    note: "从 2026 年 1 月的第 41 位跃升到 2026 年 4 月 1 日的第 29 位",
+    value: "第 22 位",
+    note: "从 2026 年 4 月 1 日的第 29 位上升到 2026 年 6 月 26 日的第 22 位",
   },
   {
     label: "季度增量",
-    value: "48,868",
-    note: "组织总 Star 数在 2026 年第一季度的新增量",
+    value: "68,000+",
+    note: "Datawhale 组织总 Star 数在 2026 年 4-6 月的新增量",
   },
   {
     label: "前五贡献",
-    value: formatNumber(topFiveTotal),
-    note: "增长前五项目合计贡献了 70% 以上的Star数增量",
+    value: "53,000+",
+    note: "增长 Top5 合计新增 53,000+，占千星项目总增量超过 80%",
   },
   {
-    label: "三月峰值",
-    value: formatNumber(quarterlyPulse[2].total),
-    note: "3 月项目总 Star 数达到季度观测窗口内最高值",
+    label: "五月峰值",
+    value: "29,000+",
+    note: "当前千星项目在 5 月新增 Star 数冲到本季度最高",
   },
 ];
 
@@ -210,18 +214,18 @@ const peerCards: PeerCard[] = (topOrganizations as OrganizationRecord[])
 const takeawayCards = [
   {
     tag: "增长模型",
-    title: "超级引擎与第二梯队接力",
-    text: "hello-agents、easy-vibe、happy-llm、all-in-rag、vibe-vibe 共同把组织增长从单点爆发拉成面状扩散。",
+    title: "超头部项目继续拉动组织增长",
+    text: "hello-agents 和 easy-vibe 两个项目合计新增 40,000+ 颗 Star，占项目总增量 65%+。",
   },
   {
     tag: "时间节奏",
-    title: "3 月是整个季度的转折点",
-    text: "项目在 2026 年 3 月单月新增 20,456 颗 Star，接近季度总量的一半，说明增长不是均匀推进，而是集中放大。",
+    title: "5 月是本季度最关键的增长月份",
+    text: "5 月由 hello-agents 单月 13,000+ 和 easy-vibe 单月 8,000+ 共同拉动，把季度热度推到高点。",
   },
   {
     tag: "外部对照",
-    title: "对外部同类组织形成明显速度差",
-    text: "Datawhale 一季度新增 48,868 颗 Star，而 TheAlgorithms、dair-ai、EbookFoundation 仍停留在 5,000 到 6,000 区间，成熟组织普遍还在低速爬坡。",
+    title: "Datawhale 进入头部竞争阶段",
+    text: "在知识分享类组织里，Datawhale 的本期 Star 增量约为第二名的 5.7 倍，位置已经从快速追赶进入头部竞争。",
   },
 ];
 
@@ -232,7 +236,7 @@ export default function ShowcasePage() {
       <header className={styles.header}>
         <div className={styles.brandBlock}>
           <span className={styles.brand}>
-            State-of-Datawhale 季度观察 (数据快照 2026-04-01)
+            State-of-Datawhale 季度观察 (数据抓取 2026-06-26)
           </span>
         </div>
       </header>
@@ -240,16 +244,16 @@ export default function ShowcasePage() {
       <main className={styles.main}>
         <section id="overview" className={styles.hero}>
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>2026 年第一季度增长报告</p>
+            <p className={styles.eyebrow}>2026 年第二季度增长海报</p>
             <h1 className={styles.heroTitle}>
               <span className={styles.highlight}>
-                Datawhale在2026年第一季度冲进全球知识分享组织前三十
+                Datawhale在2026年第二季度继续刷新全球组织排名
               </span>
             </h1>
             <p className={styles.heroLead}>
-              组织整体在 2026 年 1 至 3 月新增 48,868 颗 Star，全球排名从第 41 位升到第 29 位。增长的关键不是单一项目的偶发爆发，而是{" "}
+              2026 年 4-6 月，Datawhale 总 Star 数从 28w 进一步提升到 35w，全球组织排名从第 29 位升到第 22 位。组织内部仍由{" "}
               <strong>{getProjectDisplayName("hello-agents")}</strong>{" "}
-              飞速增长之后，第二梯队项目继续接力，把季度曲线在 3 月推到了最高点。
+              和 AI Agent、大模型学习类项目驱动，5 月成为本季度最关键的增长月份。
             </p>
           </div>
 
@@ -260,15 +264,15 @@ export default function ShowcasePage() {
               </div>
               <div className={styles.rankTrack}>
                 <div className={`${styles.rankNode} ${styles.rankNodeStart}`}>
-                  <span className={styles.rankNodeLabel}>2026-01-01</span>
-                  <strong className={styles.rankValue}>41</strong>
+                  <span className={styles.rankNodeLabel}>2026-04-01</span>
+                  <strong className={styles.rankValue}>29</strong>
                 </div>
                 <div className={styles.rankLine} />
                 <div
                   className={`${styles.rankNode} ${styles.rankNodeEnd} ${styles.rankNodeActive}`}
                 >
-                  <span className={styles.rankNodeLabel}>2026-04-01</span>
-                  <strong className={styles.rankValue}>29</strong>
+                  <span className={styles.rankNodeLabel}>2026-06-26</span>
+                  <strong className={styles.rankValue}>22</strong>
                 </div>
               </div>
             </article>
@@ -290,10 +294,10 @@ export default function ShowcasePage() {
             <div className={styles.sectionIntro}>
               <span className={styles.sectionTag}>季度增长</span>
               <h2 className={styles.sectionTitle}>
-                项目总量在整个季度持续抬升，3 月站上最高点。
+                千星项目总量继续抬升，5 月出现季度增长峰值。
               </h2>
               <p className={styles.sectionText}>
-                超过 1000 颗 Star 的项目在 1 月、2 月、3 月的总量分别是 232,408、242,140、262,596，整个季度都在持续抬升。
+                当前 Star 数超过 1000 的项目在 4-6 月合计新增 60,000+ 颗 Star，其中 4 月新增 19,000+，5 月冲高到 29,000+，6 月回落到 15,000+。
               </p>
             </div>
 
@@ -317,12 +321,10 @@ export default function ShowcasePage() {
             </div>
 
             <div className={styles.pulseSummary}>
-              <span className={styles.summaryTag}>三月高点</span>
+              <span className={styles.summaryTag}>五月高点</span>
               <p className={styles.summaryText}>
-                到 2026 年 3 月底，{getProjectDisplayName("hello-agents")} 总 Star
-                达到 32,568；{getProjectDisplayName("easy-vibe")}、
-                {getProjectDisplayName("all-in-rag")} 和
-                {getProjectDisplayName("happy-llm")} 也同步把第二增长梯队整体抬高。
+                5 月由 {getProjectDisplayName("hello-agents")} 单月新增 13,000+ 和{" "}
+                {getProjectDisplayName("easy-vibe")} 单月新增 8,000+ 共同拉动，是本季度最明显的热度峰值。
               </p>
             </div>
           </article>
@@ -331,13 +333,10 @@ export default function ShowcasePage() {
             <div className={styles.sectionIntro}>
               <span className={styles.sectionTag}>增长引擎</span>
               <h2 className={styles.sectionTitle}>
-                前五项目合计拿下 34,078 颗 Star。
+                增长 Top5 合计拿下 53,000+ 颗 Star。
               </h2>
               <p className={styles.sectionText}>
-                报告口径里，增长前五的项目合计贡献了 70%
-                以上的项目增量。只看这五个项目的季度表现，
-                {getProjectDisplayName("hello-agents")}{" "}
-                已经一个项目吃下了超过一半的前五增量。
+                文档指出，本季度增长高度集中在头部：hello-agents 和 easy-vibe 两个项目合计新增 40,000+ 颗 Star，占项目总增量 65%+；增长 Top5 占比超过 80%。
               </p>
             </div>
 
@@ -349,14 +348,14 @@ export default function ShowcasePage() {
                       {project.displayName}
                     </span>
                     <strong className={styles.stackValue}>
-                      +{formatNumber(project.q1Add)}
+                      +{formatNumber(project.quarterAdd)}
                     </strong>
                   </div>
                   <div className={styles.stackTrack}>
                     <span
                       className={styles.stackFill}
                       style={{
-                        width: `${(project.q1Add / topProjects[0].q1Add) * 100}%`,
+                        width: `${(project.quarterAdd / topProjects[0].quarterAdd) * 100}%`,
                       }}
                     />
                   </div>
@@ -368,8 +367,7 @@ export default function ShowcasePage() {
               <span className={styles.summaryTag}>核心观察</span>
               <p className={styles.summaryText}>
                 {getProjectDisplayName("hello-agents")}{" "}
-                在 2026 年 3 月底以 32,568 颗 Star 正式正式超越 {getProjectDisplayName("self-llm")}
-                ，成为组织新第一项目。
+                二季度新增 29,809 颗 Star，比一季度增量还要更高，继续稳居 Datawhale 内部第一。
               </p>
             </div>
           </article>
@@ -379,7 +377,7 @@ export default function ShowcasePage() {
           <div>
             <span className={styles.sectionTag}>项目增长Top5</span>
             <h2 className={styles.headingTitle}>
-              增长前五项目，正在把组织拉进新的规模阶段。
+              增长前五项目，继续撑起 Q2 的主要热度。
             </h2>
           </div>
         </section>
@@ -399,12 +397,12 @@ export default function ShowcasePage() {
                   <div className={styles.projectMetric}>
                     <span className={styles.projectMetricLabel}>季度新增</span>
                     <strong className={styles.projectMetricValue}>
-                      +{formatNumber(project.q1Add)}
+                      +{formatNumber(project.quarterAdd)}
                     </strong>
                   </div>
                   <div className={styles.projectMetric}>
                     <span className={styles.projectMetricLabel}>
-                      三月总Star数
+                      六月底总Star数
                     </span>
                     <strong className={styles.projectMetricValue}>
                       {formatNumber(project.totalStars)}
@@ -448,7 +446,7 @@ export default function ShowcasePage() {
           <div>
             <span className={styles.sectionTag}>新项目增长Top3</span>
             <h2 className={styles.headingTitle}>
-              新项目在 3 月已经出现明显爆点。
+              新项目在 Q2 已经跑出清晰的增长曲线。
             </h2>
           </div>
         </section>
@@ -461,7 +459,7 @@ export default function ShowcasePage() {
                   <h3 className={styles.breakoutName}>{project.displayName}</h3>
                 </div>
                 <strong className={styles.breakoutValue}>
-                  +{formatNumber(project.q1Add)}
+                  +{formatNumber(project.quarterAdd)}
                 </strong>
               </div>
 
@@ -492,7 +490,7 @@ export default function ShowcasePage() {
               </div>
 
               <div className={styles.breakoutFooter}>
-                <span className={styles.projectMetricLabel}>三月总Star数</span>
+                <span className={styles.projectMetricLabel}>六月底总Star数</span>
                 <strong className={styles.breakoutTotal}>
                   {formatNumber(project.totalStars)}
                 </strong>
@@ -506,12 +504,10 @@ export default function ShowcasePage() {
             <div className={styles.sectionIntro}>
               <span className={styles.sectionTag}>外部对照</span>
               <h2 className={styles.sectionTitle}>
-                对外部同类组织，Datawhale 的速度差已经非常明显。
+                对外部同类组织，Datawhale 的速度差继续拉开。
               </h2>
               <p className={styles.sectionText}>
-                报告里直接给出结论：在知识分享类组织里，Datawhale
-                一季度是排名提升最快的组织。即便放到全球Star数规模更大的
-                成熟组织里，这个季度增长量也明显拉开了差距。
+                文档指出，Datawhale 总 Star 数达到 352,615，GitHub 全球组织排名第 22，较 4 月 1 日继续前进 7 名；本期 Star 增量为 68,509，约为第二名的 5.7 倍。
               </p>
             </div>
 

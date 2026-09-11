@@ -9,11 +9,11 @@ module.exports = {
   },
   currentKey: {
     description: "本次生成的数据快照日期，格式为 YYYY-MM-DD；组织快照会写入 data/allOrganization/<currentKey>。",
-    value: "2026-06-26",
+    value: "2026-09-11",
   },
   previousKey: {
     description: "用于计算增量的上一期快照日期，格式为 YYYY-MM-DD；为空时会从 data/allOrganization 已有快照中自动推断。",
-    value: "2026-04-01",
+    value: "2026-06-26",
   },
   runOnlyOnFirstDay: {
     description: "是否仅允许每月 1 日执行；补历史月份时设为 false。",

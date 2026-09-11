@@ -1,0 +1,52 @@
+[
+  {
+    "name": "freeCodeCamp",
+    "star_count": 525309,
+    "rank": 13
+  },
+  {
+    "name": "TheAlgorithms",
+    "star_count": 458922,
+    "rank": 17
+  },
+  {
+    "name": "EbookFoundation",
+    "star_count": 399209,
+    "rank": 18
+  },
+  {
+    "name": "datawhalechina",
+    "star_count": 391164,
+    "rank": 20
+  },
+  {
+    "name": "ossu",
+    "star_count": 250587,
+    "rank": 39
+  },
+  {
+    "name": "doocs",
+    "star_count": 174419,
+    "rank": 66
+  },
+  {
+    "name": "dair-ai",
+    "star_count": 161400,
+    "rank": 69
+  },
+  {
+    "name": "h5bp",
+    "star_count": 157871,
+    "rank": 74
+  },
+  {
+    "name": "jobbole",
+    "star_count": 124867,
+    "rank": 100
+  },
+  {
+    "name": "papers-we-love",
+    "star_count": 109764,
+    "rank": 122
+  }
+]

@@ -4,12 +4,12 @@
   overflow: hidden;
   --font-display: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
   --font-label: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
-  color: #edf7ff;
+  color: #fff7ed;
   background:
-    radial-gradient(circle at 8% 12%, rgba(74, 214, 255, 0.18), transparent 28%),
-    radial-gradient(circle at 86% 14%, rgba(99, 255, 208, 0.14), transparent 24%),
-    radial-gradient(circle at 50% 80%, rgba(32, 70, 141, 0.22), transparent 34%),
-    linear-gradient(180deg, #08111f 0%, #040c16 42%, #03070d 100%);
+    radial-gradient(circle at 10% 12%, rgba(255, 111, 97, 0.2), transparent 30%),
+    radial-gradient(circle at 88% 18%, rgba(190, 255, 92, 0.16), transparent 26%),
+    radial-gradient(circle at 52% 82%, rgba(217, 70, 239, 0.16), transparent 36%),
+    linear-gradient(180deg, #1b1028 0%, #120b1c 44%, #080711 100%);
 }
 
 .page::before {
@@ -18,8 +18,8 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(rgba(121, 192, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(121, 192, 255, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(255, 237, 213, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 237, 213, 0.06) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: linear-gradient(180deg, rgba(255, 255, 255, 0.42), transparent 92%);
 }
@@ -36,7 +36,7 @@
   position: fixed;
   inset: -24% -10%;
   pointer-events: none;
-  background: linear-gradient(120deg, transparent 42%, rgba(120, 244, 255, 0.08) 50%, transparent 58%);
+  background: linear-gradient(120deg, transparent 42%, rgba(255, 180, 82, 0.12) 50%, transparent 58%);
   mix-blend-mode: screen;
   animation: sweep 18s linear infinite;
   z-index: 0;
@@ -63,7 +63,7 @@
 }
 
 .brand {
-  color: #95edff;
+  color: #bef264;
   font-family: var(--font-display);
   font-size: 12px;
   font-weight: 700;
@@ -122,9 +122,9 @@
 .footerCard {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(132, 214, 255, 0.16);
+  border: 1px solid rgba(255, 183, 77, 0.18);
   border-radius: 28px;
-  background: linear-gradient(180deg, rgba(8, 18, 32, 0.9), rgba(4, 9, 16, 0.92));
+  background: linear-gradient(180deg, rgba(36, 18, 48, 0.92), rgba(16, 9, 24, 0.94));
   box-shadow:
     0 26px 70px rgba(0, 0, 0, 0.28),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
@@ -141,7 +141,7 @@
   inset: 0 auto auto 0;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(121, 240, 255, 0.72) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(251, 146, 60, 0.78) 44%, rgba(190, 242, 100, 0.72) 62%, transparent 100%);
   opacity: 0.52;
 }
 
@@ -167,7 +167,7 @@
 .breakoutLabel,
 .takeawayTag,
 .summaryTag {
-  color: #8ee8ff;
+  color: #bef264;
   font-family: var(--font-label);
   font-size: 12px;
   letter-spacing: 0.08em;
@@ -191,7 +191,7 @@
   display: block;
   margin-top: 10px;
   color: transparent;
-  background: linear-gradient(90deg, #88f7ff 0%, #84c7ff 42%, #7dffc8 100%);
+  background: linear-gradient(90deg, #fb7185 0%, #f59e0b 44%, #bef264 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -206,7 +206,7 @@
 .summaryText,
 .metricNote,
 .peerNote {
-  color: #a8bfd2;
+  color: #d8c7ba;
   font-size: 15px;
   line-height: 1.75;
 }
@@ -216,7 +216,7 @@
 }
 
 .heroLead strong {
-  color: #eaf9ff;
+  color: #fff7ed;
   font-weight: 600;
 }
 
@@ -284,9 +284,9 @@
   padding: 26px;
   border-radius: 24px;
   background:
-    radial-gradient(circle at top right, rgba(127, 237, 255, 0.12), transparent 40%),
-    linear-gradient(180deg, rgba(8, 20, 35, 0.94), rgba(5, 13, 23, 0.92));
-  border: 1px solid rgba(127, 237, 255, 0.15);
+    radial-gradient(circle at top right, rgba(251, 146, 60, 0.18), transparent 40%),
+    linear-gradient(180deg, rgba(43, 20, 56, 0.94), rgba(18, 9, 26, 0.92));
+  border: 1px solid rgba(251, 146, 60, 0.22);
 }
 
 .rankHeader,
@@ -361,7 +361,7 @@
 }
 
 .rankValue {
-  color: #f4fbff;
+  color: #fff7ed;
   font-family: var(--font-display);
   font-size: clamp(3rem, 4vw, 4.5rem);
   font-weight: 700;
@@ -372,8 +372,8 @@
 }
 
 .rankNodeActive .rankValue {
-  color: #92f8ff;
-  text-shadow: 0 0 26px rgba(122, 241, 255, 0.28);
+  color: #bef264;
+  text-shadow: 0 0 26px rgba(190, 242, 100, 0.28);
 }
 
 .rankLine {
@@ -392,8 +392,8 @@
   position: absolute;
   inset: 0;
   width: 100%;
-  background: linear-gradient(90deg, rgba(124, 193, 255, 0.36) 0%, rgba(122, 241, 255, 0.92) 48%, rgba(123, 255, 199, 0.96) 100%);
-  box-shadow: 0 0 28px rgba(122, 241, 255, 0.32);
+  background: linear-gradient(90deg, rgba(251, 113, 133, 0.48) 0%, rgba(245, 158, 11, 0.94) 48%, rgba(190, 242, 100, 0.96) 100%);
+  box-shadow: 0 0 28px rgba(245, 158, 11, 0.32);
 }
 
 .metricGrid {
@@ -405,14 +405,14 @@
 .metricCard {
   padding: 18px 18px 20px;
   border-radius: 20px;
-  background: rgba(7, 18, 32, 0.78);
-  border: 1px solid rgba(127, 235, 255, 0.12);
+  background: rgba(42, 22, 52, 0.78);
+  border: 1px solid rgba(251, 146, 60, 0.16);
 }
 
 .metricValue {
   display: block;
   margin-top: 10px;
-  color: #f6fbff;
+  color: #fff7ed;
   font-family: var(--font-display);
   font-size: 1.95rem;
   font-weight: 700;
@@ -503,15 +503,15 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #5fd8ff 0%, #7df7d6 100%);
-  box-shadow: 0 0 26px rgba(95, 216, 255, 0.34);
+  background: linear-gradient(90deg, #fb7185 0%, #f59e0b 48%, #bef264 100%);
+  box-shadow: 0 0 26px rgba(245, 158, 11, 0.34);
 }
 
 .pulseValue,
 .stackValue,
 .breakoutValue,
 .breakoutTotal {
-  color: #f6fbff;
+  color: #fff7ed;
   font-size: 1rem;
   font-weight: 700;
 }
@@ -524,8 +524,8 @@
   gap: 8px;
   padding: 18px 20px;
   border-radius: 18px;
-  background: rgba(5, 15, 27, 0.78);
-  border: 1px solid rgba(127, 235, 255, 0.1);
+  background: rgba(34, 18, 44, 0.78);
+  border: 1px solid rgba(251, 146, 60, 0.14);
 }
 
 .stackRow {
@@ -584,7 +584,7 @@
   padding: 0 8px;
   border-radius: 999px;
   color: #0a1922;
-  background: linear-gradient(90deg, #84e9ff 0%, #7fffd1 100%);
+  background: linear-gradient(90deg, #fb7185 0%, #f59e0b 55%, #bef264 100%);
   font-size: 12px;
   font-weight: 700;
 }
@@ -592,7 +592,7 @@
 .projectName,
 .breakoutName,
 .takeawayTitle {
-  color: #f3fbff;
+  color: #fff7ed;
   font-family: var(--font-display);
   font-weight: 700;
 }
@@ -612,14 +612,14 @@
 .projectMetric {
   padding: 12px 14px;
   border-radius: 16px;
-  background: rgba(8, 22, 38, 0.74);
-  border: 1px solid rgba(127, 235, 255, 0.1);
+  background: rgba(42, 22, 52, 0.74);
+  border: 1px solid rgba(251, 146, 60, 0.14);
 }
 
 .projectMetricValue {
   display: block;
   margin-top: 8px;
-  color: #fbfeff;
+  color: #fff7ed;
   font-size: 1.05rem;
   font-weight: 700;
 }
@@ -628,8 +628,8 @@
   margin-top: auto;
   padding: 16px;
   border-radius: 20px;
-  background: rgba(5, 15, 27, 0.8);
-  border: 1px solid rgba(127, 235, 255, 0.1);
+  background: rgba(30, 16, 40, 0.82);
+  border: 1px solid rgba(251, 146, 60, 0.14);
 }
 .sourceList {
   display: flex;
@@ -669,7 +669,7 @@
 }
 
 .breakoutCount {
-  color: #f5fbff;
+  color: #fff7ed;
   font-size: 0.95rem;
   font-weight: 700;
 }
@@ -685,15 +685,15 @@
   align-items: center;
   padding: 18px 22px;
   border-radius: 18px;
-  background: rgba(5, 16, 28, 0.76);
-  border: 1px solid rgba(127, 235, 255, 0.08);
+  background: rgba(34, 18, 44, 0.76);
+  border: 1px solid rgba(251, 146, 60, 0.12);
 }
 
 .peerRowActive {
   background:
-    radial-gradient(circle at top right, rgba(122, 241, 255, 0.12), transparent 38%),
-    linear-gradient(90deg, rgba(11, 34, 55, 0.92), rgba(7, 20, 34, 0.88));
-  border-color: rgba(127, 235, 255, 0.24);
+    radial-gradient(circle at top right, rgba(190, 242, 100, 0.14), transparent 38%),
+    linear-gradient(90deg, rgba(58, 27, 58, 0.92), rgba(31, 17, 40, 0.88));
+  border-color: rgba(190, 242, 100, 0.28);
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
 }
 
@@ -705,7 +705,7 @@
 }
 
 .peerName {
-  color: #f7fcff;
+  color: #fff7ed;
   font-family: var(--font-display);
   font-size: 1.15rem;
   font-weight: 700;
@@ -724,7 +724,7 @@
   padding: 0 12px;
   border-radius: 999px;
   color: #041219;
-  background: linear-gradient(90deg, #84ecff 0%, #7df8d5 100%);
+  background: linear-gradient(90deg, #f97316 0%, #bef264 100%);
   font-size: 13px;
   font-weight: 700;
   display: inline-flex;
@@ -739,8 +739,8 @@
 .takeawayCard {
   padding: 18px 20px 20px;
   border-radius: 20px;
-  background: rgba(5, 15, 27, 0.78);
-  border: 1px solid rgba(127, 235, 255, 0.1);
+  background: rgba(34, 18, 44, 0.78);
+  border: 1px solid rgba(251, 146, 60, 0.14);
 }
 
 .takeawayTitle {
